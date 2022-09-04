@@ -84,6 +84,7 @@ class newpages extends StatelessWidget {
   }
 }
 
+// Fetching Json file.
 Future<List<NewsDataModel>> ReadJsonData() async {
   final jsondata = await rootBundle.rootBundle.loadString('jsonfile/news.json');
   final list = json.decode(jsondata) as List<dynamic>;
