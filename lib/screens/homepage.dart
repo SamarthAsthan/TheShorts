@@ -1,9 +1,9 @@
-// ignore_for_file: prefer_const_constructors, sort_child_properties_last, avoid_unnecessary_containers, sized_box_for_whitespace, no_leading_underscores_for_local_identifiers, prefer_const_literals_to_create_immutables, depend_on_referenced_packages
+// ignore_for_file: prefer_const_constructors, sort_child_properties_last, avoid_unnecessary_containers, sized_box_for_whitespace, no_leading_underscores_for_local_identifiers, prefer_const_literals_to_create_immutables, depend_on_referenced_packages, unused_local_variable
 
 import 'package:flutter/material.dart';
 import 'package:theshorts/lists/newslist.dart';
 import 'package:theshorts/models/NewsDataModel.dart';
-import 'package:toggle_switch/toggle_switch.dart';
+import 'package:theshorts/screens/discover.dart';
 import 'trending.dart';
 
 class HomePage extends StatelessWidget {
@@ -20,20 +20,29 @@ class HomePage extends StatelessWidget {
         key: _key, // Assign the key to Scaffold.
         endDrawer: CustomEndDrawers(),
         appBar: AppBar(
+          leadingWidth: 100,
           title: Text(
             "Home",
             style: TextStyle(color: Colors.black),
           ),
           backgroundColor: Colors.white,
-          leading: IconButton(
-            onPressed: () {
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => TrendingPage()));
-            },
-            icon: Icon(
-              Icons.trending_up_rounded,
-              color: Colors.black,
+          leading: InkWell(
+            child: Row(
+              children: [
+                Icon(
+                  Icons.keyboard_arrow_left,
+                  color: Colors.black,
+                ),
+                Text(
+                  "Discover",
+                  style: TextStyle(color: Colors.black),
+                )
+              ],
             ),
+            onTap: () {
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => DiscoverPage()));
+            },
           ),
           actions: [
             IconButton(
@@ -121,31 +130,6 @@ class CustomEndDrawers extends StatelessWidget {
           ),
         ],
       )),
-    );
-  }
-}
-
-class NightModeSwitch extends StatelessWidget {
-  const NightModeSwitch({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return ToggleSwitch(
-      cornerRadius: 10,
-      fontSize: 30,
-      iconSize: 25,
-      activeBgColors: [
-        [Colors.deepPurple],
-        [Colors.deepPurple]
-      ],
-      activeFgColor: Colors.white,
-      inactiveBgColor: Colors.black26,
-      inactiveFgColor: Colors.white,
-      totalSwitches: 2,
-      icons: [Icons.sunny, Icons.mode_night],
-      onToggle: (index) {
-        print('Selected item Position: $index');
-      },
     );
   }
 }

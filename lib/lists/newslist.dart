@@ -36,7 +36,7 @@ class newpages extends StatelessWidget {
             padding: const EdgeInsets.all(8.0),
             child: Text(
               "$title",
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
             ),
           ),
           Padding(
