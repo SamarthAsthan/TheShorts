@@ -7,6 +7,8 @@ import 'package:flutter/material.dart';
 import 'package:theshorts/models/NewsDataModel.dart';
 import 'package:flutter/services.dart' as rootBundle;
 
+import '../main.dart';
+
 //Cutom Widget
 class newpages extends StatelessWidget {
   const newpages(
@@ -21,36 +23,39 @@ class newpages extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: MediaQuery.of(context).size.height,
-      width: MediaQuery.of(context).size.width,
       child: Column(
         children: [
-          Image.network(
-            '$photoLink',
-            fit: BoxFit.fill,
-            height: MediaQuery.of(context).size.width,
-            width: MediaQuery.of(context).size.width,
-            alignment: Alignment.topCenter,
+          Expanded(
+            child: Image.network(
+              '$photoLink',
+              fit: BoxFit.fill,
+              height: MediaQuery.of(context).size.height,
+              width: MediaQuery.of(context).size.width,
+              alignment: Alignment.topCenter,
+            ),
           ),
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: Text(
               "$title",
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
+              style: TextStyle(
+                  fontSize: AdaptiveTextSize().getadaptiveTextSize(context, 18),
+                  fontWeight: FontWeight.w600),
             ),
           ),
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8.0),
+            padding: const EdgeInsets.fromLTRB(8, 1, 8, 100),
             child: Text(
               "$body",
-              style: TextStyle(fontSize: 18),
+              style: TextStyle(
+                fontSize: AdaptiveTextSize().getadaptiveTextSize(context, 15),
+              ),
             ),
           ),
-          Expanded(
-              child: Align(
+          Align(
             alignment: FractionalOffset.bottomCenter,
             child: SizedBox(
-              height: 60,
+              height: 45,
               child: Stack(
                 fit: StackFit.expand,
                 children: [
@@ -63,12 +68,15 @@ class newpages extends StatelessWidget {
                         color: Colors.grey.withOpacity(0.1),
                         alignment: Alignment.topLeft,
                         child: Padding(
-                          padding: const EdgeInsets.all(12.0),
+                          padding: const EdgeInsets.fromLTRB(20, 6, 0, 0),
                           child: Text(
-                            '$author ($source)',
+                            '- $author ($source)',
                             style: TextStyle(
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold),
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                              fontSize: AdaptiveTextSize()
+                                  .getadaptiveTextSize(context, 12),
+                            ),
                           ),
                         ),
                       ),
@@ -77,7 +85,7 @@ class newpages extends StatelessWidget {
                 ],
               ),
             ),
-          ))
+          ),
         ],
       ),
     );

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:theshorts/lists/newslist.dart';
 import 'package:theshorts/models/NewsDataModel.dart';
 import 'package:theshorts/screens/discover.dart';
+import '../main.dart';
 import 'trending.dart';
 
 class HomePage extends StatelessWidget {
@@ -35,7 +36,10 @@ class HomePage extends StatelessWidget {
                 ),
                 Text(
                   "Discover",
-                  style: TextStyle(color: Colors.black),
+                  style: TextStyle(
+                      color: Colors.black,
+                      fontSize:
+                          AdaptiveTextSize().getadaptiveTextSize(context, 15)),
                 )
               ],
             ),
@@ -110,23 +114,48 @@ class CustomEndDrawers extends StatelessWidget {
         children: [
           ListTile(
             leading: Icon(Icons.map_rounded),
-            title: Text('Select Country'),
+            title: Text(
+              'Select Country',
+              style: TextStyle(
+                fontSize: AdaptiveTextSize().getadaptiveTextSize(context, 18),
+              ),
+            ),
           ),
           ListTile(
             leading: Icon(Icons.category_rounded),
-            title: Text('Select Interest'),
+            title: Text(
+              'Select Interest',
+              style: TextStyle(
+                fontSize: AdaptiveTextSize().getadaptiveTextSize(context, 18),
+              ),
+            ),
           ),
           ListTile(
             leading: Icon(Icons.share_rounded),
-            title: Text('Share App'),
+            title: Text(
+              'Share App',
+              style: TextStyle(
+                fontSize: AdaptiveTextSize().getadaptiveTextSize(context, 18),
+              ),
+            ),
           ),
           ListTile(
             leading: Icon(Icons.bug_report),
-            title: Text('Report Bug'),
+            title: Text(
+              'Report Bug',
+              style: TextStyle(
+                fontSize: AdaptiveTextSize().getadaptiveTextSize(context, 18),
+              ),
+            ),
           ),
           ListTile(
             leading: Icon(Icons.phone),
-            title: Text('Support'),
+            title: Text(
+              'Support',
+              style: TextStyle(
+                fontSize: AdaptiveTextSize().getadaptiveTextSize(context, 18),
+              ),
+            ),
           ),
         ],
       )),

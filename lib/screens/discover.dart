@@ -1,6 +1,7 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, sort_child_properties_last, unused_import
 
 import 'package:flutter/material.dart';
+import 'package:theshorts/main.dart';
 import 'package:theshorts/screens/homepage.dart';
 import 'package:theshorts/screens/trending.dart';
 
@@ -22,7 +23,10 @@ class DiscoverPage extends StatelessWidget {
               children: [
                 Text(
                   "Home",
-                  style: TextStyle(color: Colors.black),
+                  style: TextStyle(
+                      color: Colors.black,
+                      fontSize:
+                          AdaptiveTextSize().getadaptiveTextSize(context, 15)),
                 ),
                 Icon(
                   Icons.keyboard_arrow_right,
