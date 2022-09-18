@@ -55,7 +55,7 @@ class newpages extends StatelessWidget {
           Align(
             alignment: FractionalOffset.bottomCenter,
             child: SizedBox(
-              height: 45,
+              height: 46,
               child: Stack(
                 fit: StackFit.expand,
                 children: [
