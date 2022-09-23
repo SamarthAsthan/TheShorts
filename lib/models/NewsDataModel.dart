@@ -7,7 +7,7 @@ class NewsDataModel {
   String? source_name;
   String? source_url;
   String? image_url;
-  int? created_at;
+  String? created_at;
   String? inshorts_url;
 
   NewsDataModel(

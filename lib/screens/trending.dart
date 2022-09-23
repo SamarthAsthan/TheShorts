@@ -49,6 +49,7 @@ class TrendPage extends StatelessWidget {
           var items = data.data as List<NewsDataModel>;
           var reversedList = List.from(items.reversed);
           return PageView.builder(
+            itemCount: items.length,
             itemBuilder: (context, index) {
               return newpages(
                 photoLink: reversedList[index].image_url.toString(),

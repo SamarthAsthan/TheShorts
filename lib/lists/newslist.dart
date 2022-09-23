@@ -1,10 +1,14 @@
 // ignore_for_file: prefer_const_constructors, sized_box_for_whitespace, unnecessary_string_interpolations, camel_case_types, non_constant_identifier_names
 
 import 'dart:convert';
+import 'dart:developer';
 import 'dart:ui';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:theshorts/models/NewsDataModel.dart';
+import 'package:http/http.dart' as http;
+
 import 'package:flutter/services.dart' as rootBundle;
 
 import '../main.dart';
@@ -26,8 +30,15 @@ class newpages extends StatelessWidget {
       child: Column(
         children: [
           Expanded(
-            child: Image.network(
-              '$photoLink',
+            child: CachedNetworkImage(
+              placeholder: (context, url) => Center(
+                child: SizedBox(
+                  height: 40,
+                  width: 40,
+                  child: CircularProgressIndicator(),
+                ),
+              ),
+              imageUrl: '$photoLink',
               fit: BoxFit.fill,
               height: MediaQuery.of(context).size.height,
               width: MediaQuery.of(context).size.width,
@@ -59,7 +70,7 @@ class newpages extends StatelessWidget {
               child: Stack(
                 fit: StackFit.expand,
                 children: [
-                  Image.network('$photoLink', fit: BoxFit.cover),
+                  CachedNetworkImage(imageUrl: '$photoLink', fit: BoxFit.cover),
                   ClipRRect(
                     // Clip it cleanly.
                     child: BackdropFilter(
@@ -70,7 +81,7 @@ class newpages extends StatelessWidget {
                         child: Padding(
                           padding: const EdgeInsets.fromLTRB(20, 6, 0, 0),
                           child: Text(
-                            '- $author ($source)',
+                            '- $author',
                             style: TextStyle(
                               color: Colors.white,
                               fontWeight: FontWeight.bold,
@@ -92,9 +103,32 @@ class newpages extends StatelessWidget {
   }
 }
 
+List<NewsDataModel> newList = [];
 // Fetching Json file.
 Future<List<NewsDataModel>> ReadJsonData() async {
-  final jsondata = await rootBundle.rootBundle.loadString('jsonfile/news.json');
+  /*final login =
+      await http.post(Uri.parse("http://44.205.60.172/login"), headers: {
+    "accept": "application/json",
+  }, body: {
+    "username": "samarthasthan5@gmail.com",
+    "password": "Police@007"
+  });
+  final list = json.decode(login.body);
+  var apiKey = list["access_token"];
+  print(list["access_token"])*/
+  final response = await http.get(Uri.parse("http://44.205.60.172/blog/"));
+  var data = jsonDecode(response.body.toString());
+  if (response.statusCode == 200) {
+    //debugPrint(response.body.toString());
+    final list = json.decode(response.body) as List<dynamic>;
+    //debugPrint(list.toString());
+    return list.map((e) => NewsDataModel.fromJson(e)).toList();
+    //return newList;
+  } else {
+    return newList;
+  }
+  /*final jsondata = await rootBundle.rootBundle.loadString('jsonfile/news.json');
   final list = json.decode(jsondata) as List<dynamic>;
-  return list.map((e) => NewsDataModel.fromJson(e)).toList();
+  debugPrint(list.toString());
+  return list.map((e) => NewsDataModel.fromJson(e)).toList();*/
 }

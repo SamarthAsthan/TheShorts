@@ -78,6 +78,7 @@ class HomeBody extends StatelessWidget {
           var items = data.data as List<NewsDataModel>;
           return Container(
             child: PageView.builder(
+              itemCount: items.length,
               itemBuilder: (context, index) {
                 return newpages(
                   photoLink: items[index].image_url.toString(),
