@@ -1,31 +1,64 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:shimmer/shimmer.dart';
+import 'package:theshorts/lists/newslist.dart';
+import 'package:theshorts/screens/discover.dart';
 
-import '../lists/newslist.dart';
 import '../models/NewsDataModel.dart';
 
 class TrendingPage extends StatelessWidget {
-  const TrendingPage({super.key});
+  final String pageheadline;
+  const TrendingPage({super.key, required this.pageheadline});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      extendBodyBehindAppBar: true,
       appBar: AppBar(
+        backgroundColor: Color(0x44000000),
+        elevation: 0,
         title: Text(
-          "Trending",
-          style: TextStyle(color: Colors.black),
+          '$pageheadline',
+          style: GoogleFonts.poppins(fontWeight: FontWeight.w600),
         ),
-        backgroundColor: Colors.white,
         leading: IconButton(
           onPressed: () {
-            Navigator.pop(context);
+            Navigator.pushAndRemoveUntil(
+              context,
+              MaterialPageRoute(
+                builder: (BuildContext context) => DiscoverPage(),
+              ),
+              (route) => false,
+            );
           },
           icon: Icon(
             Icons.arrow_back_ios,
-            color: Colors.black,
+            color: Colors.white,
           ),
         ),
+        actions: [
+          IconButton(
+            icon: Icon(
+              Icons.refresh_rounded,
+              color: Colors.white,
+            ),
+            onPressed: () async {
+              Navigator.pushAndRemoveUntil(
+                context,
+                PageRouteBuilder(
+                  pageBuilder: (context, animation1, animation2) =>
+                      TrendingPage(pageheadline: pageheadline),
+                  transitionDuration: Duration.zero,
+                  reverseTransitionDuration: Duration.zero,
+                ),
+                (Route<dynamic> route) => false,
+              );
+            },
+          ),
+        ],
       ),
       body: TrendPage(),
     );
@@ -47,16 +80,17 @@ class TrendPage extends StatelessWidget {
           );
         } else if (data.hasData) {
           var items = data.data as List<NewsDataModel>;
-          var reversedList = List.from(items.reversed);
+
           return PageView.builder(
             itemCount: items.length,
             itemBuilder: (context, index) {
               return newpages(
-                photoLink: reversedList[index].image_url.toString(),
-                title: reversedList[index].title.toString(),
-                body: reversedList[index].description.toString(),
-                author: reversedList[index].author_name.toString(),
-                source: reversedList[index].source_name.toString(),
+                photoLink: items[index].image_url.toString(),
+                title: items[index].title.toString(),
+                body: items[index].description.toString(),
+                author: items[index].author_name.toString(),
+                source: items[index].source_name.toString(),
+                sourceUrl: items[index].source_url.toString(),
               );
             },
             scrollDirection: Axis.vertical,
@@ -64,7 +98,36 @@ class TrendPage extends StatelessWidget {
           );
         } else {
           return Center(
-            child: CircularProgressIndicator(),
+            child: Shimmer.fromColors(
+                // ignore: sort_child_properties_last
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    Padding(
+                      padding: EdgeInsets.only(bottom: 10.0.sp),
+                      child: Container(
+                        height: 375.h,
+                        width: double.infinity,
+                        color: Colors.white,
+                      ),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(bottom: 10.0.sp),
+                      child: Container(
+                        height: 126.h,
+                        width: double.infinity,
+                        color: Colors.white,
+                      ),
+                    ),
+                    Container(
+                      height: 290.h,
+                      width: double.infinity,
+                      color: Colors.white,
+                    ),
+                  ],
+                ),
+                baseColor: Colors.grey.shade500,
+                highlightColor: Colors.grey.shade400),
           );
         }
       },

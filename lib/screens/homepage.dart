@@ -1,17 +1,23 @@
 // ignore_for_file: prefer_const_constructors, sort_child_properties_last, avoid_unnecessary_containers, sized_box_for_whitespace, no_leading_underscores_for_local_identifiers, prefer_const_literals_to_create_immutables, depend_on_referenced_packages, unused_local_variable
 
+import 'dart:async';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:shimmer/shimmer.dart';
 import 'package:theshorts/lists/newslist.dart';
 import 'package:theshorts/models/NewsDataModel.dart';
 import 'package:theshorts/screens/discover.dart';
+
 import '../main.dart';
-import 'trending.dart';
 
 class HomePage extends StatelessWidget {
   HomePage({super.key});
 
-  final GlobalKey<ScaffoldState> _key = GlobalKey(); // Create a key
+  final GlobalKey<ScaffoldState> _key = GlobalKey();
 
+  // Create a key
   @override
   Widget build(BuildContext context) {
     //Controller for managing pages.
@@ -20,41 +26,69 @@ class HomePage extends StatelessWidget {
     return Scaffold(
         key: _key, // Assign the key to Scaffold.
         endDrawer: CustomEndDrawers(),
+        extendBodyBehindAppBar: true,
         appBar: AppBar(
-          leadingWidth: 100,
+          backgroundColor: Color.fromARGB(0, 0, 0, 0),
+          elevation: 0,
+          leadingWidth: 100.w,
           title: Text(
             "Home",
-            style: TextStyle(color: Colors.black),
+            style: GoogleFonts.poppins(
+                color: Colors.white, fontWeight: FontWeight.w600),
           ),
-          backgroundColor: Colors.white,
           leading: InkWell(
             child: Row(
               children: [
                 Icon(
                   Icons.keyboard_arrow_left,
-                  color: Colors.black,
+                  color: Colors.white,
                 ),
                 Text(
                   "Discover",
-                  style: TextStyle(
-                      color: Colors.black,
-                      fontSize:
-                          AdaptiveTextSize().getadaptiveTextSize(context, 15)),
+                  style: GoogleFonts.poppins(
+                      color: Colors.white, fontWeight: FontWeight.w600),
                 )
               ],
             ),
             onTap: () {
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => DiscoverPage()));
+              Navigator.pushAndRemoveUntil(
+                context,
+                MaterialPageRoute(
+                  builder: (BuildContext context) => DiscoverPage(),
+                ),
+                (route) => false,
+              );
             },
           ),
           actions: [
-            IconButton(
-                onPressed: () => _key.currentState!.openEndDrawer(),
-                icon: Icon(
-                  Icons.more_vert,
-                  color: Colors.black,
-                ))
+            Row(
+              children: [
+                IconButton(
+                  icon: Icon(
+                    Icons.refresh_rounded,
+                    color: Colors.white,
+                  ),
+                  onPressed: () async {
+                    Navigator.pushAndRemoveUntil(
+                      context,
+                      PageRouteBuilder(
+                        pageBuilder: (context, animation1, animation2) =>
+                            HomePage(),
+                        transitionDuration: Duration.zero,
+                        reverseTransitionDuration: Duration.zero,
+                      ),
+                      (Route<dynamic> route) => false,
+                    );
+                  },
+                ),
+                IconButton(
+                    onPressed: () => _key.currentState!.openEndDrawer(),
+                    icon: Icon(
+                      Icons.more_vert,
+                      color: Colors.white,
+                    )),
+              ],
+            )
           ],
         ),
         body: HomeBody());
@@ -77,24 +111,70 @@ class HomeBody extends StatelessWidget {
         } else if (data.hasData) {
           var items = data.data as List<NewsDataModel>;
           return Container(
-            child: PageView.builder(
-              itemCount: items.length,
-              itemBuilder: (context, index) {
-                return newpages(
-                  photoLink: items[index].image_url.toString(),
-                  title: items[index].title.toString(),
-                  body: items[index].description.toString(),
-                  author: items[index].author_name.toString(),
-                  source: items[index].source_name.toString(),
+            child: RefreshIndicator(
+              onRefresh: () async {
+                items.clear();
+
+                Navigator.pushAndRemoveUntil(
+                  context,
+                  PageRouteBuilder(
+                    pageBuilder: (context, animation1, animation2) =>
+                        HomePage(),
+                    transitionDuration: Duration.zero,
+                    reverseTransitionDuration: Duration.zero,
+                  ),
+                  (Route<dynamic> route) => false,
                 );
               },
-              scrollDirection: Axis.vertical,
-              allowImplicitScrolling: true,
+              child: PageView.builder(
+                itemCount: items.length,
+                itemBuilder: (context, index) {
+                  return newpages(
+                    photoLink: items[index].image_url.toString(),
+                    title: items[index].title.toString(),
+                    body: items[index].description.toString(),
+                    author: items[index].author_name.toString(),
+                    source: items[index].source_name.toString(),
+                    sourceUrl: items[index].source_url.toString(),
+                  );
+                },
+                scrollDirection: Axis.vertical,
+                allowImplicitScrolling: true,
+              ),
             ),
           );
         } else {
           return Center(
-            child: CircularProgressIndicator(),
+            child: Shimmer.fromColors(
+                // ignore: sort_child_properties_last
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    Padding(
+                      padding: EdgeInsets.only(bottom: 10.0.sp),
+                      child: Container(
+                        height: 375.h,
+                        width: double.infinity,
+                        color: Colors.white,
+                      ),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(bottom: 10.0.sp),
+                      child: Container(
+                        height: 126.h,
+                        width: double.infinity,
+                        color: Colors.white,
+                      ),
+                    ),
+                    Container(
+                      height: 290.h,
+                      width: double.infinity,
+                      color: Colors.white,
+                    ),
+                  ],
+                ),
+                baseColor: Colors.grey.shade500,
+                highlightColor: Colors.grey.shade400),
           );
         }
       },
@@ -117,15 +197,6 @@ class CustomEndDrawers extends StatelessWidget {
             leading: Icon(Icons.map_rounded),
             title: Text(
               'Select Country',
-              style: TextStyle(
-                fontSize: AdaptiveTextSize().getadaptiveTextSize(context, 18),
-              ),
-            ),
-          ),
-          ListTile(
-            leading: Icon(Icons.category_rounded),
-            title: Text(
-              'Select Interest',
               style: TextStyle(
                 fontSize: AdaptiveTextSize().getadaptiveTextSize(context, 18),
               ),

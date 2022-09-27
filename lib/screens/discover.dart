@@ -1,6 +1,9 @@
-// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, sort_child_properties_last, unused_import
+// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, sort_child_properties_last, unused_import, unnecessary_string_interpolations
 
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:theshorts/main.dart';
 import 'package:theshorts/screens/homepage.dart';
 import 'package:theshorts/screens/trending.dart';
@@ -11,10 +14,13 @@ class DiscoverPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
+        elevation: 0,
         title: Text(
           "Discover",
-          style: TextStyle(color: Colors.black),
+          style: GoogleFonts.poppins(
+              fontWeight: FontWeight.w600, color: Colors.black),
         ),
         backgroundColor: Colors.white,
         actions: [
@@ -23,10 +29,8 @@ class DiscoverPage extends StatelessWidget {
               children: [
                 Text(
                   "Home",
-                  style: TextStyle(
-                      color: Colors.black,
-                      fontSize:
-                          AdaptiveTextSize().getadaptiveTextSize(context, 15)),
+                  style: GoogleFonts.poppins(
+                      fontWeight: FontWeight.w600, color: Colors.black),
                 ),
                 Icon(
                   Icons.keyboard_arrow_right,
@@ -35,7 +39,13 @@ class DiscoverPage extends StatelessWidget {
               ],
             ),
             onTap: () {
-              Navigator.pop(context);
+              Navigator.pushAndRemoveUntil(
+                context,
+                MaterialPageRoute(
+                  builder: (BuildContext context) => HomePage(),
+                ),
+                (route) => false,
+              );
             },
           ),
         ],
@@ -50,107 +60,164 @@ class Discoverbody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GridView.count(
-      primary: false,
-      padding: const EdgeInsets.all(10),
-      crossAxisSpacing: 4,
-      mainAxisSpacing: 4,
-      crossAxisCount: 3,
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        InkWell(
-          child: Container(
-            padding: const EdgeInsets.all(10),
-            child: Center(
-              child: const Icon(
-                Icons.trending_up_sharp,
-                color: Colors.white,
-                size: 50,
+        Padding(
+          padding: EdgeInsets.only(left: 15.w),
+          child: AutoSizeText(
+            "Choose a topic to start reading",
+            style: GoogleFonts.poppins(
+                fontSize: 30.sp, fontWeight: FontWeight.w600),
+          ),
+        ),
+        Padding(
+          padding: EdgeInsets.only(top: 20.h),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Circle(
+                    title: 'Trending',
+                    filePath: 'assets/images/Trending.png',
+                    pageTitle: 'Trending',
+                  ),
+                  Circle(
+                    title: 'Buisness',
+                    filePath: 'assets/images/Briefcase.png',
+                    pageTitle: 'Buisness',
+                  ),
+                  Circle(
+                    title: 'Politics',
+                    filePath: 'assets/images/Politics.png',
+                    pageTitle: 'Politics',
+                  ),
+                ],
+              ),
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Circle(
+                    title: 'Tech',
+                    filePath: 'assets/images/Technology.png',
+                    pageTitle: 'Technology',
+                  ),
+                  Circle(
+                    title: 'Startup',
+                    filePath: 'assets/images/startup.png',
+                    pageTitle: 'Startup',
+                  ),
+                  Circle(
+                    title: 'Science',
+                    filePath: 'assets/images/Science.png',
+                    pageTitle: 'Science',
+                  ),
+                ],
+              ),
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Circle(
+                    title: 'Fun',
+                    filePath: 'assets/images/Entertainment.png',
+                    pageTitle: 'Entertainment',
+                  ),
+                  Circle(
+                    title: 'World',
+                    filePath: 'assets/images/Earth.png',
+                    pageTitle: 'World',
+                  ),
+                  Circle(
+                    title: 'Wheels',
+                    filePath: 'assets/images/Automobile.png',
+                    pageTitle: 'Automobile',
+                  ),
+                ],
+              ),
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Circle(
+                    title: 'Fashion',
+                    filePath: 'assets/images/Fashion.png',
+                    pageTitle: 'Fashion',
+                  ),
+                  Circle(
+                    title: 'Education',
+                    filePath: 'assets/images/Education.png',
+                    pageTitle: 'Education',
+                  ),
+                  Circle(
+                    title: 'Sports',
+                    filePath: 'assets/images/Sports.png',
+                    pageTitle: 'Sports',
+                  ),
+                ],
+              )
+            ],
+          ),
+        )
+      ],
+    );
+  }
+}
+
+class Circle extends StatelessWidget {
+  final String pageTitle;
+  final String filePath;
+  final String title;
+  const Circle(
+      {super.key,
+      required this.filePath,
+      required this.title,
+      required this.pageTitle});
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: EdgeInsets.all(12.sp),
+      child: Container(
+        height: 100.h,
+        width: 100.w,
+        decoration: BoxDecoration(
+          border: Border.all(color: Colors.deepPurple, width: 2.sp),
+          shape: BoxShape.circle,
+        ),
+        child: Material(
+          shape: const CircleBorder(),
+          child: InkWell(
+            onTap: () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => TrendingPage(
+                            pageheadline: '$pageTitle',
+                          )));
+            },
+            customBorder: const CircleBorder(),
+            child: Ink(
+              decoration: const BoxDecoration(
+                  shape: BoxShape.circle, color: Colors.white),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Image.asset(
+                    '$filePath',
+                    height: 50.h,
+                    width: 50.w,
+                  ),
+                  AutoSizeText(
+                    '$title',
+                    style: GoogleFonts.poppins(fontWeight: FontWeight.w600),
+                  )
+                ],
               ),
             ),
-            color: Colors.deepPurple,
-          ),
-          onTap: () {
-            Navigator.push(context,
-                MaterialPageRoute(builder: (context) => TrendingPage()));
-          },
-        ),
-        Container(
-          padding: const EdgeInsets.all(10),
-          child: Center(
-            child: const Text('Business'),
-          ),
-          color: Colors.indigo,
-        ),
-        Container(
-          padding: const EdgeInsets.all(10),
-          child: Center(
-            child: const Text('Politics'),
-          ),
-          color: Colors.teal,
-        ),
-        Container(
-          padding: const EdgeInsets.all(10),
-          child: Center(
-            child: const Text('Technology'),
-          ),
-          color: Colors.cyan,
-        ),
-        Container(
-          padding: const EdgeInsets.all(10),
-          child: Center(
-            child: const Text('Startup'),
-          ),
-          color: Colors.yellow,
-        ),
-        Container(
-          padding: const EdgeInsets.all(10),
-          child: Center(
-            child: const Text('Science'),
           ),
         ),
-        Container(
-          padding: const EdgeInsets.all(10),
-          child: Center(
-            child: const Text('Enterainment'),
-          ),
-          color: Colors.purple,
-        ),
-        Container(
-          padding: const EdgeInsets.all(10),
-          child: Center(
-            child: const Text('International'),
-          ),
-          color: Colors.blue,
-        ),
-        Container(
-          padding: const EdgeInsets.all(10),
-          child: Center(
-            child: const Text('Automobile'),
-          ),
-          color: Colors.orange,
-        ),
-        Container(
-          padding: const EdgeInsets.all(10),
-          child: Center(
-            child: const Text('Fashion'),
-          ),
-          color: Colors.red,
-        ),
-        Container(
-          padding: const EdgeInsets.all(10),
-          child: Center(
-            child: const Text('Education'),
-          ),
-          color: Colors.indigo,
-        ),
-        Container(
-          padding: const EdgeInsets.all(10),
-          child: Center(
-            child: const Text('Health & Fitness'),
-          ),
-          color: Colors.teal,
-        ),
-      ],
+      ),
     );
   }
 }

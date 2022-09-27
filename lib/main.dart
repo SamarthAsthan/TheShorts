@@ -1,7 +1,7 @@
 // ignore_for_file: prefer_const_constructors, unnecessary_new
 
 import 'package:flutter/material.dart';
-import 'package:theshorts/screens/test.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'screens/homepage.dart';
 
 void main(List<String> args) {
@@ -13,11 +13,19 @@ class TheShorts extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: "TheShorts",
-      theme: ThemeData(primarySwatch: Colors.indigo),
-      home: HomePage(),
+    return ScreenUtilInit(
+      designSize: const Size(375, 812),
+      minTextAdapt: true,
+      builder: (context, child) {
+        return MaterialApp(
+          theme: ThemeData(
+            primarySwatch: Colors.deepPurple,
+          ),
+          debugShowCheckedModeBanner: false,
+          title: "TheShorts",
+          home: HomePage(),
+        );
+      },
     );
   }
 }

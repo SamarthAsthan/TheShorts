@@ -1,17 +1,16 @@
-// ignore_for_file: prefer_const_constructors, sized_box_for_whitespace, unnecessary_string_interpolations, camel_case_types, non_constant_identifier_names
+// ignore_for_file: prefer_const_constructors, sized_box_for_whitespace, unnecessary_string_interpolations, camel_case_types, non_constant_identifier_names, sort_child_properties_last
 
 import 'dart:convert';
-import 'dart:developer';
 import 'dart:ui';
 
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:theshorts/models/NewsDataModel.dart';
 import 'package:http/http.dart' as http;
-
-import 'package:flutter/services.dart' as rootBundle;
-
-import '../main.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 //Cutom Widget
 class newpages extends StatelessWidget {
@@ -21,84 +20,135 @@ class newpages extends StatelessWidget {
       required this.title,
       required this.body,
       required this.author,
-      required this.source});
-  final String photoLink, title, body, author, source;
+      required this.source,
+      required this.sourceUrl});
+  final String photoLink, title, body, author, source, sourceUrl;
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: Column(
-        children: [
-          Expanded(
-            child: CachedNetworkImage(
-              placeholder: (context, url) => Center(
-                child: SizedBox(
-                  height: 40,
-                  width: 40,
-                  child: CircularProgressIndicator(),
-                ),
-              ),
-              imageUrl: '$photoLink',
-              fit: BoxFit.fill,
-              height: MediaQuery.of(context).size.height,
-              width: MediaQuery.of(context).size.width,
-              alignment: Alignment.topCenter,
-            ),
+    return Stack(
+      fit: StackFit.expand,
+      children: [
+        Stack(children: [
+          CachedNetworkImage(
+              height: 500.h,
+              width: double.infinity,
+              fit: BoxFit.cover,
+              imageUrl: '$photoLink'),
+          Container(
+            height: 500.h,
+            width: double.infinity,
+            color: Colors.black.withOpacity(.6),
           ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Text(
-              "$title",
-              style: TextStyle(
-                  fontSize: AdaptiveTextSize().getadaptiveTextSize(context, 18),
-                  fontWeight: FontWeight.w600),
-            ),
+        ]),
+        Padding(
+          padding: EdgeInsets.fromLTRB(15.w, 386.h, 15.w, 365.h),
+          child: Align(
+            alignment: Alignment.bottomLeft,
+            child: AutoSizeText('$title',
+                style: GoogleFonts.poppins(
+                    fontSize: 30.sp,
+                    color: Colors.white,
+                    fontWeight: FontWeight.w600)),
           ),
-          Padding(
-            padding: const EdgeInsets.fromLTRB(8, 1, 8, 100),
-            child: Text(
-              "$body",
-              style: TextStyle(
-                fontSize: AdaptiveTextSize().getadaptiveTextSize(context, 15),
-              ),
-            ),
+        ),
+        Padding(
+          padding: EdgeInsets.fromLTRB(12.w, 85.h, 12.w, 0.h),
+          child: Divider(
+            color: Colors.grey,
+            thickness: 2.sp,
           ),
-          Align(
-            alignment: FractionalOffset.bottomCenter,
-            child: SizedBox(
-              height: 46,
+        ),
+        Padding(
+          padding: EdgeInsets.fromLTRB(15.w, 105.h, 15.w, 0.h),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text('Source: ABP news',
+                  maxLines: 8,
+                  overflow: TextOverflow.ellipsis,
+                  style: GoogleFonts.poppins(
+                      fontSize: 15.sp, color: Colors.white)),
+              Text('Publised May 13, 2020 ',
+                  maxLines: 8,
+                  overflow: TextOverflow.ellipsis,
+                  style: GoogleFonts.poppins(
+                      fontSize: 15.sp, color: Colors.white)),
+            ],
+          ),
+        ),
+        Padding(
+            padding: EdgeInsets.fromLTRB(0, 480.h, 0, 0),
+            child: Container(
+              height: 332.h,
+              decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius:
+                      BorderRadius.vertical(top: Radius.circular(20.sp))),
+            )),
+        Padding(
+          padding: EdgeInsets.fromLTRB(20.w, 500.h, 20.w, 0),
+          child: Text('$body',
+              maxLines: 7,
+              overflow: TextOverflow.ellipsis,
+              style: GoogleFonts.poppins(fontSize: 18.sp, color: Colors.black)),
+        ),
+        Align(
+          alignment: FractionalOffset.bottomCenter,
+          child: SizedBox(
+            height: 47.h,
+            child: InkWell(
               child: Stack(
                 fit: StackFit.expand,
                 children: [
                   CachedNetworkImage(imageUrl: '$photoLink', fit: BoxFit.cover),
+                  Container(
+                    height: double.infinity,
+                    width: double.infinity,
+                    color: Colors.black.withOpacity(.6),
+                  ),
                   ClipRRect(
                     // Clip it cleanly.
                     child: BackdropFilter(
-                      filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+                      filter: ImageFilter.blur(sigmaX: 10.w, sigmaY: 10.h),
                       child: Container(
                         color: Colors.grey.withOpacity(0.1),
                         alignment: Alignment.topLeft,
                         child: Padding(
-                          padding: const EdgeInsets.fromLTRB(20, 6, 0, 0),
+                          padding: EdgeInsets.fromLTRB(20.w, 6.h, 0.w, 0.h),
                           child: Text(
-                            '- $author',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold,
-                              fontSize: AdaptiveTextSize()
-                                  .getadaptiveTextSize(context, 12),
-                            ),
+                            'Tap to know more',
+                            style: GoogleFonts.poppins(
+                                color: Colors.white,
+                                fontWeight: FontWeight.w500,
+                                fontSize: 12.sp),
                           ),
                         ),
                       ),
                     ),
-                  ),
+                  )
                 ],
               ),
+              onTap: () {
+                Future<void> _launchInBrowser(String url) async {
+                  if (await canLaunch(url)) {
+                    await launch(
+                      url,
+                      forceSafariVC: true,
+                      forceWebView: true,
+                      headers: <String, String>{'header_key': 'header_value'},
+                    );
+                  } else {
+                    throw 'Could not launch $url';
+                  }
+                }
+
+                _launchInBrowser('$sourceUrl');
+              },
             ),
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }
@@ -106,29 +156,12 @@ class newpages extends StatelessWidget {
 List<NewsDataModel> newList = [];
 // Fetching Json file.
 Future<List<NewsDataModel>> ReadJsonData() async {
-  /*final login =
-      await http.post(Uri.parse("http://44.205.60.172/login"), headers: {
-    "accept": "application/json",
-  }, body: {
-    "username": "samarthasthan5@gmail.com",
-    "password": "Police@007"
-  });
-  final list = json.decode(login.body);
-  var apiKey = list["access_token"];
-  print(list["access_token"])*/
   final response = await http.get(Uri.parse("http://44.205.60.172/blog/"));
-  var data = jsonDecode(response.body.toString());
   if (response.statusCode == 200) {
-    //debugPrint(response.body.toString());
     final list = json.decode(response.body) as List<dynamic>;
-    //debugPrint(list.toString());
+    // print(list.length);
     return list.map((e) => NewsDataModel.fromJson(e)).toList();
-    //return newList;
   } else {
     return newList;
   }
-  /*final jsondata = await rootBundle.rootBundle.loadString('jsonfile/news.json');
-  final list = json.decode(jsondata) as List<dynamic>;
-  debugPrint(list.toString());
-  return list.map((e) => NewsDataModel.fromJson(e)).toList();*/
 }
