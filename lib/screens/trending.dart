@@ -10,8 +10,11 @@ import 'package:theshorts/screens/discover.dart';
 import '../models/NewsDataModel.dart';
 
 class TrendingPage extends StatelessWidget {
-  final String pageheadline;
-  const TrendingPage({super.key, required this.pageheadline});
+  final String pageheadline, categoryTrendingPage;
+  const TrendingPage(
+      {super.key,
+      required this.pageheadline,
+      required this.categoryTrendingPage});
 
   @override
   Widget build(BuildContext context) {
@@ -50,7 +53,10 @@ class TrendingPage extends StatelessWidget {
                 context,
                 PageRouteBuilder(
                   pageBuilder: (context, animation1, animation2) =>
-                      TrendingPage(pageheadline: pageheadline),
+                      TrendingPage(
+                    pageheadline: pageheadline,
+                    categoryTrendingPage: categoryTrendingPage,
+                  ),
                   transitionDuration: Duration.zero,
                   reverseTransitionDuration: Duration.zero,
                 ),
@@ -60,19 +66,22 @@ class TrendingPage extends StatelessWidget {
           ),
         ],
       ),
-      body: TrendPage(),
+      body: TrendPage(
+        categoryTrendPage: categoryTrendingPage,
+      ),
     );
   }
 }
 
 // Trending page Body
 class TrendPage extends StatelessWidget {
-  const TrendPage({super.key});
+  final String categoryTrendPage;
+  const TrendPage({super.key, required this.categoryTrendPage});
 
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-      future: ReadJsonData(),
+      future: ReadJsonData(categoryTrendPage),
       builder: (context, data) {
         if (data.hasError) {
           return Center(

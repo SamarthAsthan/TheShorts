@@ -153,15 +153,16 @@ class newpages extends StatelessWidget {
   }
 }
 
-List<NewsDataModel> newList = [];
+List<NewsDataModel> newsList = [];
 // Fetching Json file.
-Future<List<NewsDataModel>> ReadJsonData() async {
-  final response = await http.get(Uri.parse("http://44.205.60.172/blog/"));
+Future<List<NewsDataModel>> ReadJsonData(String category) async {
+  var response =
+      await http.get(Uri.parse("http://44.205.60.172/blog/?$category&count=1"));
   if (response.statusCode == 200) {
-    final list = json.decode(response.body) as List<dynamic>;
+    var listNews = json.decode(response.body) as List<dynamic>;
     // print(list.length);
-    return list.map((e) => NewsDataModel.fromJson(e)).toList();
+    return listNews.map((e) => NewsDataModel.fromJson(e)).toList();
   } else {
-    return newList;
+    return newsList;
   }
 }

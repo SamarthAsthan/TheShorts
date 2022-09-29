@@ -83,16 +83,19 @@ class Discoverbody extends StatelessWidget {
                     title: 'Trending',
                     filePath: 'assets/images/Trending.png',
                     pageTitle: 'Trending',
+                    categoryDiscover: '',
                   ),
                   Circle(
                     title: 'Buisness',
                     filePath: 'assets/images/Briefcase.png',
                     pageTitle: 'Buisness',
+                    categoryDiscover: '',
                   ),
                   Circle(
                     title: 'Politics',
                     filePath: 'assets/images/Politics.png',
                     pageTitle: 'Politics',
+                    categoryDiscover: '',
                   ),
                 ],
               ),
@@ -103,16 +106,19 @@ class Discoverbody extends StatelessWidget {
                     title: 'Tech',
                     filePath: 'assets/images/Technology.png',
                     pageTitle: 'Technology',
+                    categoryDiscover: '',
                   ),
                   Circle(
                     title: 'Startup',
                     filePath: 'assets/images/startup.png',
                     pageTitle: 'Startup',
+                    categoryDiscover: '',
                   ),
                   Circle(
                     title: 'Science',
                     filePath: 'assets/images/Science.png',
                     pageTitle: 'Science',
+                    categoryDiscover: '',
                   ),
                 ],
               ),
@@ -123,16 +129,19 @@ class Discoverbody extends StatelessWidget {
                     title: 'Fun',
                     filePath: 'assets/images/Entertainment.png',
                     pageTitle: 'Entertainment',
+                    categoryDiscover: '',
                   ),
                   Circle(
                     title: 'World',
                     filePath: 'assets/images/Earth.png',
                     pageTitle: 'World',
+                    categoryDiscover: '',
                   ),
                   Circle(
                     title: 'Wheels',
                     filePath: 'assets/images/Automobile.png',
                     pageTitle: 'Automobile',
+                    categoryDiscover: '',
                   ),
                 ],
               ),
@@ -143,16 +152,19 @@ class Discoverbody extends StatelessWidget {
                     title: 'Fashion',
                     filePath: 'assets/images/Fashion.png',
                     pageTitle: 'Fashion',
+                    categoryDiscover: '',
                   ),
                   Circle(
                     title: 'Education',
                     filePath: 'assets/images/Education.png',
                     pageTitle: 'Education',
+                    categoryDiscover: '',
                   ),
                   Circle(
                     title: 'Sports',
                     filePath: 'assets/images/Sports.png',
                     pageTitle: 'Sports',
+                    categoryDiscover: 'category=sports',
                   ),
                 ],
               )
@@ -168,11 +180,13 @@ class Circle extends StatelessWidget {
   final String pageTitle;
   final String filePath;
   final String title;
+  final String categoryDiscover;
   const Circle(
       {super.key,
       required this.filePath,
       required this.title,
-      required this.pageTitle});
+      required this.pageTitle,
+      required this.categoryDiscover});
 
   @override
   Widget build(BuildContext context) {
@@ -190,11 +204,14 @@ class Circle extends StatelessWidget {
           child: InkWell(
             onTap: () {
               Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => TrendingPage(
-                            pageheadline: '$pageTitle',
-                          )));
+                context,
+                MaterialPageRoute(
+                  builder: (context) => TrendingPage(
+                    pageheadline: '$pageTitle',
+                    categoryTrendingPage: '$categoryDiscover',
+                  ),
+                ),
+              );
             },
             customBorder: const CircleBorder(),
             child: Ink(
@@ -210,7 +227,8 @@ class Circle extends StatelessWidget {
                   ),
                   AutoSizeText(
                     '$title',
-                    style: GoogleFonts.poppins(fontWeight: FontWeight.w600),
+                    style: GoogleFonts.poppins(
+                        fontWeight: FontWeight.w600, fontSize: 14.sp),
                   )
                 ],
               ),

@@ -102,7 +102,7 @@ class HomeBody extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-      future: ReadJsonData(),
+      future: ReadJsonData(''),
       builder: (context, data) {
         if (data.hasError) {
           return Center(
@@ -114,7 +114,6 @@ class HomeBody extends StatelessWidget {
             child: RefreshIndicator(
               onRefresh: () async {
                 items.clear();
-
                 Navigator.pushAndRemoveUntil(
                   context,
                   PageRouteBuilder(
