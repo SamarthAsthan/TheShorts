@@ -94,13 +94,13 @@ class TrendPage extends StatelessWidget {
             itemCount: items.length,
             itemBuilder: (context, index) {
               return newpages(
-                photoLink: items[index].image_url.toString(),
-                title: items[index].title.toString(),
-                body: items[index].description.toString(),
-                author: items[index].author_name.toString(),
-                source: items[index].source_name.toString(),
-                sourceUrl: items[index].source_url.toString(),
-              );
+                  photoLink: items[index].image_url.toString(),
+                  title: items[index].title.toString(),
+                  body: items[index].description.toString(),
+                  author: items[index].author_name.toString(),
+                  source: items[index].source_name.toString(),
+                  sourceUrl: items[index].source_url.toString(),
+                  created_at: items[index].created_at.toString());
             },
             scrollDirection: Axis.vertical,
             allowImplicitScrolling: true,

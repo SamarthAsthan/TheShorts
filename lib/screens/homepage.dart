@@ -102,7 +102,7 @@ class HomeBody extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-      future: ReadJsonData(''),
+      future: ReadJsonData('category=general'),
       builder: (context, data) {
         if (data.hasError) {
           return Center(
@@ -134,7 +134,7 @@ class HomeBody extends StatelessWidget {
                     body: items[index].description.toString(),
                     author: items[index].author_name.toString(),
                     source: items[index].source_name.toString(),
-                    sourceUrl: items[index].source_url.toString(),
+                    sourceUrl: items[index].source_url.toString(), created_at: items[index].created_at.toString(),
                   );
                 },
                 scrollDirection: Axis.vertical,

@@ -5,6 +5,7 @@ import 'dart:ui';
 
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -21,8 +22,9 @@ class newpages extends StatelessWidget {
       required this.body,
       required this.author,
       required this.source,
-      required this.sourceUrl});
-  final String photoLink, title, body, author, source, sourceUrl;
+      required this.sourceUrl,
+      required this.created_at});
+  final String photoLink, title, body, author, source, sourceUrl, created_at;
 
   @override
   Widget build(BuildContext context) {
@@ -31,6 +33,12 @@ class newpages extends StatelessWidget {
       children: [
         Stack(children: [
           CachedNetworkImage(
+              placeholder: (context, url) => SizedBox(
+                    child: CupertinoActivityIndicator(
+                      animating: true,
+                      radius: 20,
+                    ),
+                  ),
               height: 500.h,
               width: double.infinity,
               fit: BoxFit.cover,
@@ -64,12 +72,12 @@ class newpages extends StatelessWidget {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text('Source: ABP news',
+              Text('$author',
                   maxLines: 8,
                   overflow: TextOverflow.ellipsis,
                   style: GoogleFonts.poppins(
                       fontSize: 15.sp, color: Colors.white)),
-              Text('Publised May 13, 2020 ',
+              Text('Publised $created_at',
                   maxLines: 8,
                   overflow: TextOverflow.ellipsis,
                   style: GoogleFonts.poppins(
@@ -157,11 +165,13 @@ List<NewsDataModel> newsList = [];
 // Fetching Json file.
 Future<List<NewsDataModel>> ReadJsonData(String category) async {
   var response =
-      await http.get(Uri.parse("http://44.205.60.172/blog/?$category&count=1"));
+      await http.get(Uri.parse("http://44.205.60.172/blog/?$category"));
   if (response.statusCode == 200) {
-    var listNews = json.decode(response.body) as List<dynamic>;
-    // print(list.length);
-    return listNews.map((e) => NewsDataModel.fromJson(e)).toList();
+    Map<String, dynamic> listNews = json.decode(response.body);
+    List<dynamic> data = listNews["articles"];
+
+    print(data.length);
+    return data.map((e) => NewsDataModel.fromJson(e)).toList();
   } else {
     return newsList;
   }
