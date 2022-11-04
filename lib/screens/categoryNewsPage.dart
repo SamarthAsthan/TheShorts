@@ -4,8 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:shimmer/shimmer.dart';
-import 'package:theshorts/lists/newslist.dart';
-import 'package:theshorts/screens/discover.dart';
+import 'package:theshorts/lists/newsLayout.dart';
+import 'package:theshorts/screens/discoverPage.dart';
+import 'package:theshorts/utils/apicalls.dart';
 
 import '../models/NewsDataModel.dart';
 
@@ -81,7 +82,7 @@ class TrendPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-      future: ReadJsonData(categoryTrendPage),
+      future: NewsCall().readJsonData('category=general','INDIA','ENGLISH'),
       builder: (context, data) {
         if (data.hasError) {
           return Center(

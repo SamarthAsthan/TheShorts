@@ -42,7 +42,9 @@ class newpages extends StatelessWidget {
               height: 500.h,
               width: double.infinity,
               fit: BoxFit.cover,
-              imageUrl: '$photoLink'),
+              imageUrl: photoLink.contains("http")
+                  ? "$photoLink"
+                  : "https://uploads-us-west-2.insided.com/looker-en/attachment/d0a25f59-c9b7-40bd-b98e-de785bbd04e7.png"),
           Container(
             height: 500.h,
             width: double.infinity,
@@ -109,7 +111,11 @@ class newpages extends StatelessWidget {
               child: Stack(
                 fit: StackFit.expand,
                 children: [
-                  CachedNetworkImage(imageUrl: '$photoLink', fit: BoxFit.cover),
+                  CachedNetworkImage(
+                      fit: BoxFit.cover,
+                      imageUrl: photoLink.contains("http")
+                          ? "$photoLink"
+                          : "https://uploads-us-west-2.insided.com/looker-en/attachment/d0a25f59-c9b7-40bd-b98e-de785bbd04e7.png"),
                   Container(
                     height: double.infinity,
                     width: double.infinity,
@@ -161,18 +167,4 @@ class newpages extends StatelessWidget {
   }
 }
 
-List<NewsDataModel> newsList = [];
-// Fetching Json file.
-Future<List<NewsDataModel>> ReadJsonData(String category) async {
-  var response =
-      await http.get(Uri.parse("http://44.205.60.172/blog/?$category"));
-  if (response.statusCode == 200) {
-    Map<String, dynamic> listNews = json.decode(response.body);
-    List<dynamic> data = listNews["articles"];
 
-    print(data.length);
-    return data.map((e) => NewsDataModel.fromJson(e)).toList();
-  } else {
-    return newsList;
-  }
-}

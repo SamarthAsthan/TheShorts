@@ -5,8 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:theshorts/main.dart';
-import 'package:theshorts/screens/homepage.dart';
-import 'package:theshorts/screens/trending.dart';
+import 'package:theshorts/screens/homePage.dart';
+import 'package:theshorts/screens/categoryNewsPage.dart';
 
 class DiscoverPage extends StatelessWidget {
   const DiscoverPage({super.key});
@@ -42,7 +42,7 @@ class DiscoverPage extends StatelessWidget {
               Navigator.pushAndRemoveUntil(
                 context,
                 MaterialPageRoute(
-                  builder: (BuildContext context) => HomePage(),
+                  builder: (BuildContext context) => HomePage(country: 'INDIA', language: 'ENGLISH',),
                 ),
                 (route) => false,
               );
@@ -177,16 +177,17 @@ class Discoverbody extends StatelessWidget {
 }
 
 class Circle extends StatelessWidget {
-  final String pageTitle;
-  final String filePath;
-  final String title;
-  final String categoryDiscover;
   const Circle(
       {super.key,
       required this.filePath,
       required this.title,
       required this.pageTitle,
       required this.categoryDiscover});
+
+  final String categoryDiscover;
+  final String filePath;
+  final String pageTitle;
+  final String title;
 
   @override
   Widget build(BuildContext context) {

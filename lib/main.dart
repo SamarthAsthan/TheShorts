@@ -2,7 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'screens/homepage.dart';
+import 'package:theshorts/screens/onBoardPage.dart';
 
 void main(List<String> args) {
   runApp(TheShorts());
@@ -23,18 +23,9 @@ class TheShorts extends StatelessWidget {
           ),
           debugShowCheckedModeBanner: false,
           title: "TheShorts",
-          home: HomePage(),
+          home: OnBoardPage(),
         );
       },
     );
-  }
-}
-
-class AdaptiveTextSize {
-  const AdaptiveTextSize();
-
-  getadaptiveTextSize(BuildContext context, dynamic value) {
-    // 720 is medium screen height
-    return (value / 720) * MediaQuery.of(context).size.height;
   }
 }

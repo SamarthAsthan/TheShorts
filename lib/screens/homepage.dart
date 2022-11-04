@@ -6,14 +6,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:shimmer/shimmer.dart';
-import 'package:theshorts/lists/newslist.dart';
+import 'package:theshorts/lists/newsLayout.dart';
 import 'package:theshorts/models/NewsDataModel.dart';
-import 'package:theshorts/screens/discover.dart';
+import 'package:theshorts/screens/discoverPage.dart';
+import 'package:theshorts/utils/ApiCalls.dart';
 
 import '../main.dart';
 
 class HomePage extends StatelessWidget {
-  HomePage({super.key});
+  final String country, language;
+  HomePage({super.key, required this.country, required this.language});
 
   final GlobalKey<ScaffoldState> _key = GlobalKey();
 
@@ -73,7 +75,7 @@ class HomePage extends StatelessWidget {
                       context,
                       PageRouteBuilder(
                         pageBuilder: (context, animation1, animation2) =>
-                            HomePage(),
+                            HomePage(language: language, country: country),
                         transitionDuration: Duration.zero,
                         reverseTransitionDuration: Duration.zero,
                       ),
@@ -91,18 +93,25 @@ class HomePage extends StatelessWidget {
             )
           ],
         ),
-        body: HomeBody());
+        body: HomeBody(
+          country: country,
+          language: language,
+        ));
   }
 }
 
 // HomePage Body
 class HomeBody extends StatelessWidget {
-  const HomeBody({super.key});
+  final String country, language;
+
+  const HomeBody({super.key, required this.country, required this.language});
 
   @override
   Widget build(BuildContext context) {
+    print("$country /// $language");
     return FutureBuilder(
-      future: ReadJsonData('category=general'),
+      future:
+          NewsCall().readJsonData('category=general', '$country', '$language'),
       builder: (context, data) {
         if (data.hasError) {
           return Center(
@@ -118,7 +127,7 @@ class HomeBody extends StatelessWidget {
                   context,
                   PageRouteBuilder(
                     pageBuilder: (context, animation1, animation2) =>
-                        HomePage(),
+                        HomePage(language: language, country: country),
                     transitionDuration: Duration.zero,
                     reverseTransitionDuration: Duration.zero,
                   ),
@@ -134,7 +143,8 @@ class HomeBody extends StatelessWidget {
                     body: items[index].description.toString(),
                     author: items[index].author_name.toString(),
                     source: items[index].source_name.toString(),
-                    sourceUrl: items[index].source_url.toString(), created_at: items[index].created_at.toString(),
+                    sourceUrl: items[index].source_url.toString(),
+                    created_at: items[index].created_at.toString(),
                   );
                 },
                 scrollDirection: Axis.vertical,
@@ -152,7 +162,7 @@ class HomeBody extends StatelessWidget {
                     Padding(
                       padding: EdgeInsets.only(bottom: 10.0.sp),
                       child: Container(
-                        height: 375.h,
+                        height: 376.h,
                         width: double.infinity,
                         color: Colors.white,
                       ),
@@ -197,7 +207,7 @@ class CustomEndDrawers extends StatelessWidget {
             title: Text(
               'Select Country',
               style: TextStyle(
-                fontSize: AdaptiveTextSize().getadaptiveTextSize(context, 18),
+                fontSize: 18.sp,
               ),
             ),
           ),
@@ -206,7 +216,7 @@ class CustomEndDrawers extends StatelessWidget {
             title: Text(
               'Share App',
               style: TextStyle(
-                fontSize: AdaptiveTextSize().getadaptiveTextSize(context, 18),
+                fontSize: 18.sp,
               ),
             ),
           ),
@@ -215,7 +225,7 @@ class CustomEndDrawers extends StatelessWidget {
             title: Text(
               'Report Bug',
               style: TextStyle(
-                fontSize: AdaptiveTextSize().getadaptiveTextSize(context, 18),
+                fontSize: 18.sp,
               ),
             ),
           ),
@@ -224,7 +234,7 @@ class CustomEndDrawers extends StatelessWidget {
             title: Text(
               'Support',
               style: TextStyle(
-                fontSize: AdaptiveTextSize().getadaptiveTextSize(context, 18),
+                fontSize: 18.sp,
               ),
             ),
           ),
