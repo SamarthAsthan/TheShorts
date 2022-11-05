@@ -56,6 +56,7 @@ class newpages extends StatelessWidget {
           child: Align(
             alignment: Alignment.bottomLeft,
             child: AutoSizeText('$title',
+                maxLines: 2,
                 style: GoogleFonts.poppins(
                     fontSize: 30.sp,
                     color: Colors.white,

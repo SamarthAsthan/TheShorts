@@ -2,6 +2,7 @@
 
 import 'dart:async';
 
+import 'package:api_cache_manager/utils/cache_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -31,6 +32,7 @@ class HomePage extends StatelessWidget {
         extendBodyBehindAppBar: true,
         appBar: AppBar(
           backgroundColor: Color.fromARGB(0, 0, 0, 0),
+          centerTitle: true,
           elevation: 0,
           leadingWidth: 100.w,
           title: Text(
@@ -71,6 +73,7 @@ class HomePage extends StatelessWidget {
                     color: Colors.white,
                   ),
                   onPressed: () async {
+                    APICacheManager().deleteCache("News");
                     Navigator.pushAndRemoveUntil(
                       context,
                       PageRouteBuilder(
@@ -108,7 +111,6 @@ class HomeBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print("$country /// $language");
     return FutureBuilder(
       future:
           NewsCall().readJsonData('category=general', '$country', '$language'),
@@ -123,6 +125,7 @@ class HomeBody extends StatelessWidget {
             child: RefreshIndicator(
               onRefresh: () async {
                 items.clear();
+                APICacheManager().deleteCache("News");
                 Navigator.pushAndRemoveUntil(
                   context,
                   PageRouteBuilder(
@@ -237,6 +240,21 @@ class CustomEndDrawers extends StatelessWidget {
                 fontSize: 18.sp,
               ),
             ),
+          ),
+          InkWell(
+            child: ListTile(
+              leading: Icon(Icons.cached_rounded),
+              title: Text(
+                'Clear Cache',
+                style: TextStyle(
+                  fontSize: 18.sp,
+                ),
+              ),
+            ),
+            onTap: (){
+              APICacheManager().deleteCache("savedCountry");
+              APICacheManager().deleteCache("savedLanguage");
+            },
           ),
         ],
       )),

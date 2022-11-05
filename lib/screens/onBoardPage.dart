@@ -1,7 +1,12 @@
+// ignore_for_file: use_build_context_synchronously
+
+import 'package:api_cache_manager/models/cache_db_model.dart';
+import 'package:api_cache_manager/utils/cache_manager.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:lottie/lottie.dart';
 import 'package:theshorts/screens/homePage.dart';
 import 'package:theshorts/utils/ApiCalls.dart';
@@ -155,14 +160,20 @@ class OnBoardContent1 extends StatelessWidget {
         ),
         Text(
           "Welcome",
-          style: TextStyle(fontSize: 35.sp, fontWeight: FontWeight.bold),
+          style: GoogleFonts.poppins(
+              fontSize: 30.sp,
+              color: Colors.black,
+              fontWeight: FontWeight.w600),
         ),
         SizedBox(
           height: 12.h,
         ),
         Text(
             textAlign: TextAlign.center,
-            style: TextStyle(fontSize: 18.sp, fontWeight: FontWeight.w500),
+            style: GoogleFonts.poppins(
+                fontSize: 18.sp,
+                color: Colors.black,
+                fontWeight: FontWeight.w600),
             "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s"),
         SizedBox(
           height: 19.h,
@@ -213,7 +224,10 @@ class OnBoardContent2 extends StatelessWidget {
           ),
           Text(
             "Select your country",
-            style: TextStyle(fontSize: 25.sp, fontWeight: FontWeight.bold),
+            style: GoogleFonts.poppins(
+                fontSize: 25.sp,
+                color: Colors.black,
+                fontWeight: FontWeight.w600),
           ),
           SizedBox(
             height: 5.h,
@@ -236,17 +250,17 @@ class OnBoardContent2 extends StatelessWidget {
                           return Container(
                             alignment: Alignment.center,
                             child: Padding(
-                              padding: const EdgeInsets.all(16.0),
+                              padding: const EdgeInsets.all(10.0),
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: <Widget>[
                                   InkWell(
                                     child: Text(
                                       items[index].countryName.toString(),
-                                      style: TextStyle(
-                                          fontSize: 16.sp,
-                                          fontWeight: FontWeight.bold),
-                                    ),
+                                       style: GoogleFonts.poppins(
+                                fontSize: 18.sp,
+                                color: Colors.black,
+                                fontWeight: FontWeight.w600)),
                                     onTap: () {
                                       selectData.languageList =
                                           items[index].Languages!.toList();
@@ -322,7 +336,10 @@ class OnBoardContent3 extends StatelessWidget {
         ),
         Text(
           "Select your language",
-          style: TextStyle(fontSize: 25.sp, fontWeight: FontWeight.bold),
+          style: GoogleFonts.poppins(
+              fontSize: 25.sp,
+              color: Colors.black,
+              fontWeight: FontWeight.w600),
         ),
         SizedBox(
           height: 10.h,
@@ -336,16 +353,27 @@ class OnBoardContent3 extends StatelessWidget {
                 child: ListView.builder(
                   itemBuilder: (context, index) {
                     return Padding(
-                      padding: const EdgeInsets.all(16.0),
+                      padding: const EdgeInsets.all(10.0),
                       child: Column(
                         children: <Widget>[
                           InkWell(
                             child: Text(
                               selectData.languageList[index],
-                              style: TextStyle(
-                                  fontSize: 16.sp, fontWeight: FontWeight.bold),
+                              style: GoogleFonts.poppins(
+                                  fontSize: 18.sp,
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.w600),
                             ),
-                            onTap: () {
+                            onTap: () async {
+                              APICacheDBModel cacheCountry =
+                              APICacheDBModel(key: "savedCountry", syncData:selectData.country.toUpperCase() );
+                              await APICacheManager().addCacheData(cacheCountry);
+                              APICacheDBModel cacheLanguage =
+                              APICacheDBModel(key: "savedLanguage", syncData:selectData.languageList[index]
+                                  .toString()
+                                  .toUpperCase() );
+                              await APICacheManager().addCacheData(cacheLanguage);
+                              APICacheManager().deleteCache("News");
                               Navigator.pushAndRemoveUntil(
                                 context,
                                 MaterialPageRoute(
