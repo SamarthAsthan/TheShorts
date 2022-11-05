@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:lottie/lottie.dart';
+import 'package:theshorts/constants.dart';
 import 'package:theshorts/screens/homePage.dart';
 import 'package:theshorts/utils/ApiCalls.dart';
 
@@ -47,9 +48,9 @@ class _OnBoardPageState extends State<OnBoardPage> {
       appBar: AppBar(
         backgroundColor: Colors.white,
         elevation: 0,
+        toolbarHeight: 0,
       ),
-      body: SafeArea(
-          child: Container(
+      body: Container(
         color: Colors.white,
         child: Padding(
           padding: const EdgeInsets.all(16.0),
@@ -83,7 +84,7 @@ class _OnBoardPageState extends State<OnBoardPage> {
                 width: double.infinity,
                 child: Row(
                   children: [
-                    Spacer(),
+                    const Spacer(),
                     ...List.generate(
                       3,
                       (index) => Padding(
@@ -93,14 +94,15 @@ class _OnBoardPageState extends State<OnBoardPage> {
                         ),
                       ),
                     ),
-                    Spacer(),
+                    const Spacer(),
                   ],
                 ),
-              )
+              ),
+              SizedBox(height: 10.h,)
             ],
           ),
         ),
-      )),
+      ),
     );
   }
 }
@@ -116,12 +118,14 @@ class DotIndicator extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AnimatedContainer(
-      duration: Duration(milliseconds: 300),
+      duration: const Duration(milliseconds: 300),
       height: isActive ? 10.h : 6.h,
-      width: 20.w,
+      width: 6.w,
       decoration: BoxDecoration(
-          color: isActive ? Colors.green : Colors.green.withOpacity(0.4),
-          borderRadius: BorderRadius.all(Radius.circular(12))),
+          color: isActive
+              ? Constants.primaryColor
+              : Constants.primaryColor.withOpacity(0.4),
+          borderRadius: const BorderRadius.all(Radius.circular(12))),
     );
   }
 }
@@ -142,7 +146,8 @@ class OnBoardContent1 extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
-      mainAxisAlignment: MainAxisAlignment.start,
+      mainAxisAlignment: MainAxisAlignment.center,
+      mainAxisSize: MainAxisSize.max,
       children: [
         Center(
           child: Padding(
@@ -161,7 +166,7 @@ class OnBoardContent1 extends StatelessWidget {
         Text(
           "Welcome",
           style: GoogleFonts.poppins(
-              fontSize: 30.sp,
+              fontSize: 37.sp,
               color: Colors.black,
               fontWeight: FontWeight.w600),
         ),
@@ -171,23 +176,24 @@ class OnBoardContent1 extends StatelessWidget {
         Text(
             textAlign: TextAlign.center,
             style: GoogleFonts.poppins(
-                fontSize: 18.sp,
+                fontSize: 20.sp,
                 color: Colors.black,
                 fontWeight: FontWeight.w600),
-            "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s"),
+            "Bad news travels at the speed of light, good news travels like molasses"),
         SizedBox(
           height: 19.h,
         ),
         CircleAvatar(
           radius: 30.sp,
-          backgroundColor: Colors.green,
+          backgroundColor: Constants.primaryColor,
           child: IconButton(
               color: Colors.white,
               onPressed: () {
                 pageController.animateToPage(1,
-                    duration: Duration(milliseconds: 300), curve: Curves.ease);
+                    duration: const Duration(milliseconds: 300),
+                    curve: Curves.ease);
               },
-              icon: Icon(Icons.arrow_forward_ios_rounded)),
+              icon: const Icon(Icons.arrow_forward_ios_rounded)),
         ),
       ],
     );
@@ -205,25 +211,23 @@ class OnBoardContent2 extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       child: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisSize: MainAxisSize.max,
         children: [
-          Center(
-            child: SizedBox(
-              height: 250.h,
-              width: 250.w,
-              child: Lottie.asset(
-                'assets/lottie_file/country.json',
-                repeat: true,
-                reverse: false,
-                animate: true,
-              ),
+          SizedBox(
+            height: 250.h,
+            width: 250.w,
+            child: Lottie.asset(
+              'assets/lottie_file/country.json',
+              repeat: true,
+              reverse: false,
+              animate: true,
             ),
           ),
-          SizedBox(
-            height: 5.h,
-          ),
+          
           Text(
-            "Select your country",
+            textAlign: TextAlign.start,
+            "Which country's news do you want to read?",
             style: GoogleFonts.poppins(
                 fontSize: 25.sp,
                 color: Colors.black,
@@ -241,61 +245,92 @@ class OnBoardContent2 extends StatelessWidget {
                 );
               } else if (data.hasData) {
                 var items = data.data as List<RegionModel>;
-                return Container(
-                  child: Expanded(
+                return Expanded(
+                  child: Card(
+                    color: Colors.white.withOpacity(0.8),
+                    //elevation: 5,
                     child: Padding(
                       padding: const EdgeInsets.all(16.0),
-                      child: ListView.builder(
+                      child: ListView.separated(
                         itemBuilder: (context, index) {
-                          return Container(
-                            alignment: Alignment.center,
-                            child: Padding(
-                              padding: const EdgeInsets.all(10.0),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: <Widget>[
-                                  InkWell(
+                          return Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: <Widget>[
+                              InkWell(
+                                child: ConstrainedBox(
+                                  constraints: const BoxConstraints(
+                                      minWidth: double.infinity),
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(5.0),
                                     child: Text(
-                                      items[index].countryName.toString(),
-                                       style: GoogleFonts.poppins(
-                                fontSize: 18.sp,
-                                color: Colors.black,
-                                fontWeight: FontWeight.w600)),
-                                    onTap: () {
-                                      selectData.languageList =
-                                          items[index].Languages!.toList();
-                                      selectData.country = items[index]
-                                          .countryName
-                                          .toString()
-                                          .toUpperCase();
-                                      pageController.animateToPage(2,
-                                          duration: Duration(milliseconds: 300),
-                                          curve: Curves.ease);
-                                    },
+                                        items[index].countryName.toString(),
+                                        style: GoogleFonts.poppins(
+                                            fontSize: 20.sp,
+                                            color: Constants.primaryColor,
+                                            fontWeight: FontWeight.w600)),
                                   ),
-                                ],
+                                ),
+                                onTap: () {
+                                  selectData.languageList =
+                                      items[index].Languages!.toList();
+                                  selectData.country = items[index]
+                                      .countryName
+                                      .toString()
+                                      .toUpperCase();
+                                  pageController.animateToPage(2,
+                                      duration:
+                                          const Duration(milliseconds: 300),
+                                      curve: Curves.ease);
+                                },
                               ),
-                            ),
+                            ],
                           );
                         },
                         itemCount: items.length,
+                        separatorBuilder: (BuildContext context, int index) =>
+                            const Divider(),
                       ),
                     ),
                   ),
                 );
               } else {
-                return Container(
-                  height: 100.h,
-                  width: 100.w,
-                  child: const Center(
-                    child: CupertinoActivityIndicator(
-                      animating: true,
-                      radius: 20,
+                return Expanded(
+                  child: Center(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      // ignore: prefer_const_literals_to_create_immutables
+                      children: [
+                        const CupertinoActivityIndicator(
+                          animating: true,
+                          radius: 20,
+                        ),
+                        const Padding(
+                          padding: EdgeInsets.all(15.0),
+                          child: Text(
+                              textAlign: TextAlign.center,
+                              "Please wait, while fetching latest supported language form our server."),
+                        )
+                      ],
                     ),
                   ),
                 );
               }
             },
+          ),
+          Align(
+            alignment: FractionalOffset.bottomCenter,
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Text(
+                textAlign: TextAlign.center,
+                "Whatever country and language you select now will be your default reading settings, You can also change this by going to the app's settings",
+                style: GoogleFonts.poppins(
+                    fontSize: 15.sp,
+                    color: Colors.black,
+                    fontWeight: FontWeight.w600),
+              ),
+            ),
           ),
         ],
       ),
@@ -315,27 +350,27 @@ class OnBoardContent3 extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      mainAxisSize: MainAxisSize.max,
       children: [
         Center(
-          child: Padding(
-            padding: const EdgeInsets.all(5.0),
-            child: SizedBox(
-              height: 250.h,
-              width: 250.w,
-              child: Lottie.asset(
-                'assets/lottie_file/language.json',
-                repeat: true,
-                reverse: false,
-                animate: true,
-              ),
+          child: SizedBox(
+            height: 200.h,
+            width: 200.w,
+            child: Lottie.asset(
+              'assets/lottie_file/language.json',
+              repeat: true,
+              reverse: false,
+              animate: true,
             ),
           ),
         ),
-        SizedBox(
-          height: 10.h,
-        ),
+       
         Text(
-          "Select your language",
+          textAlign: TextAlign.start,
+          "We currently support all these languages ​​in " +
+              selectData.country +
+              ", please select yours",
           style: GoogleFonts.poppins(
               fontSize: 25.sp,
               color: Colors.black,
@@ -346,56 +381,77 @@ class OnBoardContent3 extends StatelessWidget {
         ),
         Container(
           child: Expanded(
-            child: Container(
-              alignment: Alignment.center,
+            child: Card(
+              color: Colors.white.withOpacity(0.8),
+              //elevation: 5,
               child: Padding(
                 padding: const EdgeInsets.all(16.0),
-                child: ListView.builder(
+                child: ListView.separated(
                   itemBuilder: (context, index) {
-                    return Padding(
-                      padding: const EdgeInsets.all(10.0),
-                      child: Column(
-                        children: <Widget>[
-                          InkWell(
-                            child: Text(
-                              selectData.languageList[index],
-                              style: GoogleFonts.poppins(
-                                  fontSize: 18.sp,
-                                  color: Colors.black,
-                                  fontWeight: FontWeight.w600),
+                    return Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        InkWell(
+                          child: ConstrainedBox(
+                            constraints:
+                                const BoxConstraints(minWidth: double.infinity),
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Text(
+                                selectData.languageList[index],
+                                style: GoogleFonts.poppins(
+                                    fontSize: 20.sp,
+                                    color: Constants.primaryColor,
+                                    fontWeight: FontWeight.w600),
+                              ),
                             ),
-                            onTap: () async {
-                              APICacheDBModel cacheCountry =
-                              APICacheDBModel(key: "savedCountry", syncData:selectData.country.toUpperCase() );
-                              await APICacheManager().addCacheData(cacheCountry);
-                              APICacheDBModel cacheLanguage =
-                              APICacheDBModel(key: "savedLanguage", syncData:selectData.languageList[index]
-                                  .toString()
-                                  .toUpperCase() );
-                              await APICacheManager().addCacheData(cacheLanguage);
-                              APICacheManager().deleteCache("News");
-                              Navigator.pushAndRemoveUntil(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => HomePage(
-                                    language: selectData.languageList[index]
-                                        .toString()
-                                        .toUpperCase(),
-                                    country: selectData.country.toUpperCase(),
-                                  ),
-                                ),
-                                (route) => false,
-                              );
-                            },
                           ),
-                        ],
-                      ),
+                          onTap: () async {
+                            APICacheDBModel cacheCountry = APICacheDBModel(
+                                key: "savedCountry",
+                                syncData: selectData.country.toUpperCase());
+                            await APICacheManager().addCacheData(cacheCountry);
+                            APICacheDBModel cacheLanguage = APICacheDBModel(
+                                key: "savedLanguage",
+                                syncData: selectData.languageList[index]
+                                    .toString()
+                                    .toUpperCase());
+                            await APICacheManager().addCacheData(cacheLanguage);
+                            APICacheManager().deleteCache("News");
+                            Navigator.pushAndRemoveUntil(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => HomePage(
+                                  language: selectData.languageList[index]
+                                      .toString()
+                                      .toUpperCase(),
+                                  country: selectData.country.toUpperCase(),
+                                ),
+                              ),
+                              (route) => false,
+                            );
+                          },
+                        ),
+                      ],
                     );
                   },
                   itemCount: selectData.languageList.length,
+                  separatorBuilder: (BuildContext context, int index) =>
+                      const Divider(),
                 ),
               ),
             ),
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Text(
+            textAlign: TextAlign.center,
+            "We are working hard to support more countries and languages",
+            style: GoogleFonts.poppins(
+                fontSize: 15.sp,
+                color: Colors.black,
+                fontWeight: FontWeight.w600),
           ),
         ),
       ],

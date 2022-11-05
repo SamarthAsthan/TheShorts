@@ -67,7 +67,7 @@ class RegionCall {
 // Fetching Json file.
   Future<List<RegionModel>> readJsonData() async {
     var response = await http.get(
-        Uri.parse("http://faddugamers.com:8090/region/"));
+        Uri.parse("https://mocki.io/v1/773719f3-1a06-4237-96a6-416e607f0dd8"));
     if (response.statusCode == 200) {
       Map<String, dynamic> countryList = json.decode(response.body);
       List<dynamic> data = countryList["Countries"];

@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:shimmer/shimmer.dart';
-import 'package:theshorts/lists/newsLayout.dart';
+import 'package:theshorts/layouts/newsLayout.dart';
 import 'package:theshorts/models/NewsDataModel.dart';
 import 'package:theshorts/screens/discoverPage.dart';
 import 'package:theshorts/utils/ApiCalls.dart';
@@ -25,7 +25,7 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     //Controller for managing pages.
     final _controller = PageController();
-
+    print("Loading $country and $language");
     return Scaffold(
         key: _key, // Assign the key to Scaffold.
         endDrawer: CustomEndDrawers(),
@@ -251,7 +251,7 @@ class CustomEndDrawers extends StatelessWidget {
                 ),
               ),
             ),
-            onTap: (){
+            onTap: () {
               APICacheManager().deleteCache("savedCountry");
               APICacheManager().deleteCache("savedLanguage");
             },
