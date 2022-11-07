@@ -77,7 +77,7 @@ class _SwipeNewsState extends State<SwipeNews> {
                     context,
                     PageRouteBuilder(
                       pageBuilder: (context, animation1, animation2) =>
-                          SwipeNews(
+                          HomePage(
                               language: widget.language,
                               country: widget.country),
                       transitionDuration: Duration.zero,

@@ -13,11 +13,10 @@ import 'package:theshorts/models/CategoriesModel.dart';
 import 'package:theshorts/models/RegionsModel.dart';
 import 'package:theshorts/screens/homePage.dart';
 import 'package:theshorts/screens/categoryNewsPage.dart';
-import 'package:theshorts/screens/settings.dart';
 import 'package:theshorts/utils/apicalls.dart';
 
-class DiscoverPage extends StatelessWidget {
-  const DiscoverPage({super.key});
+class SettingsPage extends StatelessWidget {
+  const SettingsPage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -28,62 +27,39 @@ class DiscoverPage extends StatelessWidget {
         elevation: 0,
         leadingWidth: 100.w,
         title: Text(
-          "Discover",
+          "Settings",
           style: GoogleFonts.notoSansSymbols(
               color: Colors.black, fontWeight: FontWeight.w600),
         ),
         backgroundColor: Colors.white,
-        actions: [
-          InkWell(
-            child: Row(
-              children: [
-                Text(
-                  "Home",
-                  style: GoogleFonts.poppins(
-                      fontWeight: FontWeight.w600, color: Colors.black),
-                ),
-                Icon(
-                  Icons.keyboard_arrow_right,
-                  color: Colors.black,
-                ),
-              ],
-            ),
-            onTap: () {
-              Constants.screensPageViewController.animateToPage(1,
-                  duration: const Duration(milliseconds: 300),
-                  curve: Curves.ease);
-            },
-          ),
-        ],
         leading: InkWell(
           child: Row(
             children: [
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Icon(
-                  Icons.settings,
-                  color: Colors.black,
-                ),
+              Icon(
+                Icons.keyboard_arrow_left,
+                color: Colors.black,
               ),
+              Text(
+                "Back",
+                style: GoogleFonts.poppins(
+                    color: Colors.black, fontWeight: FontWeight.w600),
+              )
             ],
           ),
           onTap: () {
-           Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => SettingsPage()
-                ),
-              );
+            Navigator.pop(
+              context,
+            );
           },
         ),
       ),
-      body: SafeArea(child: Discoverbody()),
+      body: SafeArea(child: SettingsPageBody()),
     );
   }
 }
 
-class Discoverbody extends StatelessWidget {
-  const Discoverbody({super.key});
+class SettingsPageBody extends StatelessWidget {
+  const SettingsPageBody({super.key});
   Future<List<int>> _f() async {
     return await Future.delayed(Duration(seconds: 3))
         .then((value) => [1, 3, 5, 56, 65]);
@@ -91,7 +67,10 @@ class Discoverbody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
+    return Center(
+      child: Text("Welcome to settings"),
+    );
+    /*Column(
       mainAxisSize: MainAxisSize.max,
       children: [
         FutureBuilder(
@@ -173,7 +152,7 @@ class Discoverbody extends StatelessWidget {
           },
         ),
       ],
-    );
+    );*/
   }
 }
 

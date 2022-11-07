@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:theshorts/constants.dart';
 import 'package:theshorts/screens/discoverPage.dart';
+import 'package:theshorts/screens/settings.dart';
 import 'package:theshorts/screens/swipeNews.dart';
 
 class HomePage extends StatelessWidget {
@@ -69,6 +70,7 @@ class _HomePageViewState extends State<HomePageView> {
                 });
               },
               children: [
+               
                 DiscoverPage(),
                 SwipeNews(country: widget.country, language: widget.language),
               ],

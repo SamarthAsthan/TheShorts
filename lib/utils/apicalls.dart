@@ -25,7 +25,7 @@ class NewsCall {
         await APICacheManager().addCacheData(cacheDBModel);
         Map<String, dynamic> listNews = json.decode(response.body);
         List<dynamic> data = listNews["articles"];
-        print("API-Hit");
+
         Constants.isNewsCached = 0;
 
         return data.map((e) => NewsDataModel.fromJson(e)).toList();
@@ -36,7 +36,6 @@ class NewsCall {
       var cacheData = await APICacheManager().getCacheData("News");
       Map<String, dynamic> listNews = json.decode(cacheData.syncData);
       List<dynamic> data = listNews["articles"];
-      print("Cache-Hit");
 
       return data.map((e) => NewsDataModel.fromJson(e)).toList();
     }
@@ -95,7 +94,7 @@ class CategoryCall {
         await APICacheManager().addCacheData(cacheDBModel);
         Map<String, dynamic> categoryList = json.decode(response.body);
         List<dynamic> data = categoryList["Categories"];
-        print("Discover API-Hit");
+
         return data.map((e) => CategoriesModel.fromJson(e)).toList();
       } else {
         return categoryList;
@@ -104,7 +103,6 @@ class CategoryCall {
       var cacheData = await APICacheManager().getCacheData("Categories");
       Map<String, dynamic> listNews = json.decode(cacheData.syncData);
       List<dynamic> data = listNews["Categories"];
-      print("Discover Cache-Hit");
 
       return data.map((e) => CategoriesModel.fromJson(e)).toList();
     }
