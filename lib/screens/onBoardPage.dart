@@ -366,15 +366,16 @@ class OnBoardContent3 extends StatelessWidget {
           ),
         ),
        
-        Text(
-          textAlign: TextAlign.start,
-          "We currently support all these languages ​​in " +
-              selectData.country +
-              ", please select yours",
-          style: GoogleFonts.poppins(
-              fontSize: 25.sp,
-              color: Colors.black,
-              fontWeight: FontWeight.w600),
+        Align(
+          child: Text(
+            textAlign: TextAlign.start,
+            "Please select your language.",
+            style: GoogleFonts.poppins(
+                fontSize: 25.sp,
+                color: Colors.black,
+                fontWeight: FontWeight.w600),
+          ),
+          alignment: Alignment.centerLeft,
         ),
         SizedBox(
           height: 10.h,

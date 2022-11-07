@@ -11,11 +11,9 @@ import 'package:theshorts/utils/apicalls.dart';
 import '../models/NewsDataModel.dart';
 
 class TrendingPage extends StatelessWidget {
-  final String pageheadline, categoryTrendingPage;
+  final String pageheadline, category;
   const TrendingPage(
-      {super.key,
-      required this.pageheadline,
-      required this.categoryTrendingPage});
+      {super.key, required this.pageheadline, required this.category});
 
   @override
   Widget build(BuildContext context) {
@@ -30,13 +28,7 @@ class TrendingPage extends StatelessWidget {
         ),
         leading: IconButton(
           onPressed: () {
-            Navigator.pushAndRemoveUntil(
-              context,
-              MaterialPageRoute(
-                builder: (BuildContext context) => DiscoverPage(),
-              ),
-              (route) => false,
-            );
+            Navigator.pop(context);
           },
           icon: Icon(
             Icons.arrow_back_ios,
@@ -56,7 +48,7 @@ class TrendingPage extends StatelessWidget {
                   pageBuilder: (context, animation1, animation2) =>
                       TrendingPage(
                     pageheadline: pageheadline,
-                    categoryTrendingPage: categoryTrendingPage,
+                    category: category,
                   ),
                   transitionDuration: Duration.zero,
                   reverseTransitionDuration: Duration.zero,
@@ -68,7 +60,7 @@ class TrendingPage extends StatelessWidget {
         ],
       ),
       body: TrendPage(
-        categoryTrendPage: categoryTrendingPage,
+        category: category,
       ),
     );
   }
@@ -76,13 +68,15 @@ class TrendingPage extends StatelessWidget {
 
 // Trending page Body
 class TrendPage extends StatelessWidget {
-  final String categoryTrendPage;
-  const TrendPage({super.key, required this.categoryTrendPage});
+  final String category;
+  const TrendPage({super.key, required this.category});
 
   @override
   Widget build(BuildContext context) {
+    print(category);
     return FutureBuilder(
-      future: NewsCall().readJsonData('category=general','INDIA','ENGLISH'),
+      future:
+          NewsCall2().readJsonData("category=$category", 'INDIA', 'ENGLISH'),
       builder: (context, data) {
         if (data.hasError) {
           return Center(

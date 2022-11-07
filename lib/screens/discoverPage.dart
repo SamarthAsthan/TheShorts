@@ -1,12 +1,19 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, sort_child_properties_last, unused_import, unnecessary_string_interpolations
 
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:lottie/lottie.dart';
+import 'package:theshorts/constants.dart';
 import 'package:theshorts/main.dart';
+import 'package:theshorts/models/CategoriesModel.dart';
+import 'package:theshorts/models/RegionsModel.dart';
 import 'package:theshorts/screens/homePage.dart';
 import 'package:theshorts/screens/categoryNewsPage.dart';
+import 'package:theshorts/utils/apicalls.dart';
 
 class DiscoverPage extends StatelessWidget {
   const DiscoverPage({super.key});
@@ -15,15 +22,17 @@ class DiscoverPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
+      
       appBar: AppBar(
+        centerTitle: true,
         elevation: 0,
         title: Text(
           "Discover",
-          style: GoogleFonts.poppins(
-              fontWeight: FontWeight.w600, color: Colors.black),
+          style: GoogleFonts.notoSansSymbols(
+              color: Colors.black, fontWeight: FontWeight.w600),
         ),
         backgroundColor: Colors.white,
-        actions: [
+       actions: [
           InkWell(
             child: Row(
               children: [
@@ -39,138 +48,108 @@ class DiscoverPage extends StatelessWidget {
               ],
             ),
             onTap: () {
-              Navigator.pushAndRemoveUntil(
-                context,
-                MaterialPageRoute(
-                  builder: (BuildContext context) => HomePage(country: 'INDIA', language: 'ENGLISH',),
-                ),
-                (route) => false,
-              );
+               Constants.screensPageViewController.animateToPage(1,
+                    duration: const Duration(milliseconds: 300),
+                    curve: Curves.ease);
             },
           ),
         ],
       ),
-      body: Discoverbody(),
+      body: SafeArea(child: Discoverbody()),
     );
   }
 }
 
 class Discoverbody extends StatelessWidget {
   const Discoverbody({super.key});
+  Future<List<int>> _f() async {
+    return await Future.delayed(Duration(seconds: 3))
+        .then((value) => [1, 3, 5, 56, 65]);
+  }
 
   @override
   Widget build(BuildContext context) {
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.center,
+      mainAxisSize: MainAxisSize.max,
       children: [
-        Padding(
-          padding: EdgeInsets.only(left: 15.w),
-          child: AutoSizeText(
-            "Choose a topic to start reading",
-            style: GoogleFonts.poppins(
-                fontSize: 30.sp, fontWeight: FontWeight.w600),
-          ),
+        FutureBuilder(
+          future: CategoryCall().readJsonData(),
+          builder: (context, data) {
+            if (data.hasError) {
+              return Center(
+                child: Text("${data.error}"),
+              );
+            } else if (data.hasData) {
+              var items = data.data as List<CategoriesModel>;
+
+              return Expanded(
+                child: CustomScrollView(
+                  slivers: [
+                    SliverFixedExtentList(
+                      itemExtent: 50.sp,
+                      delegate: SliverChildListDelegate([
+                        Align(
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Text(
+                              "Choose a topic to start reading",
+                              style: GoogleFonts.notoSans(
+                                  fontSize: 25.sp, fontWeight: FontWeight.w600),
+                              textAlign: TextAlign.center,
+                            ),
+                          ),
+                          alignment: Alignment.center,
+                        ),
+                      ]),
+                    ),
+                    SliverGrid(
+                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 3,
+                        childAspectRatio: .7,
+                      ),
+                      delegate: SliverChildBuilderDelegate(
+                        (BuildContext context, int index) {
+                          return Padding(
+                            padding: const EdgeInsets.all(0.0),
+                            child: Circle(
+                              url: items[index].url.toString(),
+                              title: items[index].name.toString(),
+                              pageTitle: items[index].name.toString(),
+                              categoryDiscover: items[index].keyword.toString(),
+                              index: index,
+                            ),
+                          );
+                        },
+                        childCount: items.length,
+                      ),
+                    ),
+                  ],
+                ),
+              );
+            } else {
+              return Expanded(
+                child: Center(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    // ignore: prefer_const_literals_to_create_immutables
+                    children: [
+                      const CupertinoActivityIndicator(
+                        animating: true,
+                        radius: 20,
+                      ),
+                      const Padding(
+                        padding: EdgeInsets.all(15.0),
+                        child: Text(
+                            textAlign: TextAlign.center, "Loading Categories"),
+                      )
+                    ],
+                  ),
+                ),
+              );
+            }
+          },
         ),
-        Padding(
-          padding: EdgeInsets.only(top: 20.h),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Circle(
-                    title: 'Trending',
-                    filePath: 'assets/images/Trending.png',
-                    pageTitle: 'Trending',
-                    categoryDiscover: 'general==trending',
-                  ),
-                  Circle(
-                    title: 'Buisness',
-                    filePath: 'assets/images/Briefcase.png',
-                    pageTitle: 'Buisness',
-                    categoryDiscover: 'category=business',
-                  ),
-                  Circle(
-                    title: 'Politics',
-                    filePath: 'assets/images/Politics.png',
-                    pageTitle: 'Politics',
-                    categoryDiscover: 'category=politics',
-                  ),
-                ],
-              ),
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Circle(
-                    title: 'Tech',
-                    filePath: 'assets/images/Technology.png',
-                    pageTitle: 'Technology',
-                    categoryDiscover: 'category=tech',
-                  ),
-                  Circle(
-                    title: 'Startup',
-                    filePath: 'assets/images/startup.png',
-                    pageTitle: 'Startup',
-                    categoryDiscover: '',
-                  ),
-                  Circle(
-                    title: 'Science',
-                    filePath: 'assets/images/Science.png',
-                    pageTitle: 'Science',
-                    categoryDiscover: 'category=science',
-                  ),
-                ],
-              ),
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Circle(
-                    title: 'Fun',
-                    filePath: 'assets/images/Entertainment.png',
-                    pageTitle: 'Entertainment',
-                    categoryDiscover: 'category=fun',
-                  ),
-                  Circle(
-                    title: 'World',
-                    filePath: 'assets/images/Earth.png',
-                    pageTitle: 'World',
-                    categoryDiscover: 'category=world',
-                  ),
-                  Circle(
-                    title: 'Wheels',
-                    filePath: 'assets/images/Automobile.png',
-                    pageTitle: 'Automobile',
-                    categoryDiscover: 'category=wheels',
-                  ),
-                ],
-              ),
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Circle(
-                    title: 'Fashion',
-                    filePath: 'assets/images/Fashion.png',
-                    pageTitle: 'Fashion',
-                    categoryDiscover: 'category=fashion',
-                  ),
-                  Circle(
-                    title: 'Education',
-                    filePath: 'assets/images/Education.png',
-                    pageTitle: 'Education',
-                    categoryDiscover: 'category=education',
-                  ),
-                  Circle(
-                    title: 'Sports',
-                    filePath: 'assets/images/Sports.png',
-                    pageTitle: 'Sports',
-                    categoryDiscover: 'category=sports',
-                  ),
-                ],
-              )
-            ],
-          ),
-        )
       ],
     );
   }
@@ -179,26 +158,27 @@ class Discoverbody extends StatelessWidget {
 class Circle extends StatelessWidget {
   const Circle(
       {super.key,
-      required this.filePath,
+      required this.url,
       required this.title,
       required this.pageTitle,
-      required this.categoryDiscover});
+      required this.categoryDiscover,
+      required this.index});
 
   final String categoryDiscover;
-  final String filePath;
+  final String url;
   final String pageTitle;
   final String title;
+  final int index;
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.all(12.sp),
+      padding: EdgeInsets.all(5.sp),
       child: Container(
-        height: 100.h,
-        width: 100.w,
         decoration: BoxDecoration(
-          border: Border.all(color: Colors.deepPurple, width: 2.sp),
-          shape: BoxShape.circle,
+          borderRadius: BorderRadius.all(Radius.circular(5)),
+          border: Border.all(color: Constants.primaryColor, width: 0.sp),
+          shape: BoxShape.rectangle,
         ),
         child: Material(
           shape: const CircleBorder(),
@@ -209,7 +189,7 @@ class Circle extends StatelessWidget {
                 MaterialPageRoute(
                   builder: (context) => TrendingPage(
                     pageheadline: '$pageTitle',
-                    categoryTrendingPage: '$categoryDiscover',
+                    category: '$categoryDiscover',
                   ),
                 ),
               );
@@ -218,18 +198,80 @@ class Circle extends StatelessWidget {
             child: Ink(
               decoration: const BoxDecoration(
                   shape: BoxShape.circle, color: Colors.white),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
+              child: Stack(
                 children: [
-                  Image.asset(
-                    '$filePath',
-                    height: 50.h,
-                    width: 50.w,
+                  index != 0
+                      ? Align(
+                          child: Padding(
+                            padding: const EdgeInsets.all(2.0),
+                            child: CachedNetworkImage(
+                              placeholder: (context, url) => SizedBox(
+                                child: CupertinoActivityIndicator(
+                                  animating: true,
+                                  radius: 10,
+                                ),
+                              ),
+                              imageUrl: url,
+                            ),
+                          ),
+                        )
+                      : Align(
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(5.0),
+                            child: CachedNetworkImage(
+                                placeholder: (context, url) => SizedBox(
+                                      child: CupertinoActivityIndicator(
+                                        animating: true,
+                                        radius: 10,
+                                      ),
+                                    ),
+                                fit: BoxFit.cover,
+                                height: double.infinity,
+                                imageUrl: url),
+                          ),
+                          alignment: Alignment.bottomCenter,
+                        ),
+                  Align(
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(5.0),
+                      child: Container(
+                        width: double.infinity,
+                        height: 80.h,
+                        decoration: BoxDecoration(
+                            gradient: LinearGradient(
+                                begin: Alignment.topCenter,
+                                end: Alignment.bottomCenter,
+                                colors: [
+                              //create 2 white colors, one transparent
+                              Color.fromARGB(0, 255, 255, 255),
+                              Color.fromARGB(255, 255, 255, 255)
+                            ])),
+                      ),
+                    ),
+                    alignment: Alignment.bottomCenter,
                   ),
-                  AutoSizeText(
-                    '$title',
-                    style: GoogleFonts.poppins(
-                        fontWeight: FontWeight.w600, fontSize: 14.sp),
+                  Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.all(Radius.circular(5)),
+                      border: Border.all(
+                          color: Constants.primaryColor, width: 1.sp),
+                      shape: BoxShape.rectangle,
+                    ),
+                  ),
+                  Align(
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: index != 0
+                          ? AutoSizeText(
+                              '$title',
+                              minFontSize: 15,
+                              style: GoogleFonts.notoSans(
+                                  fontWeight: FontWeight.w600, fontSize: 14.sp),
+                              textAlign: TextAlign.center,
+                            )
+                          : SizedBox(),
+                    ),
+                    alignment: Alignment.bottomCenter,
                   )
                 ],
               ),

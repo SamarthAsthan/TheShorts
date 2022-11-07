@@ -3,27 +3,30 @@
 import 'package:api_cache_manager/utils/cache_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:theshorts/constants.dart';
 import 'package:theshorts/screens/homePage.dart';
 import 'package:theshorts/screens/onBoardPage.dart';
 
 Future<void> main(List<String> args) async {
   WidgetsFlutterBinding.ensureInitialized();
+  //Constants.runTime=1;
   bool isSaved;
   var isCacheExist = await APICacheManager().isAPICacheKeyExist("savedCountry");
   var cachedCountry;
-  var cachedLangauge;
+  var cachedLanguage;
+  APICacheManager().deleteCache("Categories");
   if (!isCacheExist) {
     isSaved = false;
   } else {
     isSaved = true;
     cachedCountry = await APICacheManager().getCacheData("savedCountry");
-    cachedLangauge = await APICacheManager().getCacheData("savedLanguage");
+    cachedLanguage = await APICacheManager().getCacheData("savedLanguage");
   }
 
   if (isSaved == true) {
     runApp(MainHomePage(
       savedCountry: cachedCountry.syncData,
-      savedLanguage: cachedLangauge.syncData,
+      savedLanguage: cachedLanguage.syncData,
     ));
   } else {
     runApp(StartOnBoardPage());

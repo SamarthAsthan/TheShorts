@@ -1,18 +1,10 @@
 // ignore_for_file: prefer_const_constructors, sort_child_properties_last, avoid_unnecessary_containers, sized_box_for_whitespace, no_leading_underscores_for_local_identifiers, prefer_const_literals_to_create_immutables, depend_on_referenced_packages, unused_local_variable
 
-import 'dart:async';
-
-import 'package:api_cache_manager/utils/cache_manager.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:shimmer/shimmer.dart';
-import 'package:theshorts/layouts/newsLayout.dart';
-import 'package:theshorts/models/NewsDataModel.dart';
+import 'package:theshorts/constants.dart';
 import 'package:theshorts/screens/discoverPage.dart';
-import 'package:theshorts/utils/ApiCalls.dart';
-
-import '../main.dart';
+import 'package:theshorts/screens/swipeNews.dart';
 
 class HomePage extends StatelessWidget {
   final String country, language;
@@ -25,239 +17,65 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     //Controller for managing pages.
     final _controller = PageController();
-    print("Loading $country and $language");
     return Scaffold(
         key: _key, // Assign the key to Scaffold.
-        endDrawer: CustomEndDrawers(),
         extendBodyBehindAppBar: true,
-        appBar: AppBar(
-          backgroundColor: Color.fromARGB(0, 0, 0, 0),
-          centerTitle: true,
-          elevation: 0,
-          leadingWidth: 100.w,
-          title: Text(
-            "Home",
-            style: GoogleFonts.poppins(
-                color: Colors.white, fontWeight: FontWeight.w600),
-          ),
-          leading: InkWell(
-            child: Row(
-              children: [
-                Icon(
-                  Icons.keyboard_arrow_left,
-                  color: Colors.white,
-                ),
-                Text(
-                  "Discover",
-                  style: GoogleFonts.poppins(
-                      color: Colors.white, fontWeight: FontWeight.w600),
-                )
-              ],
-            ),
-            onTap: () {
-              Navigator.pushAndRemoveUntil(
-                context,
-                MaterialPageRoute(
-                  builder: (BuildContext context) => DiscoverPage(),
-                ),
-                (route) => false,
-              );
-            },
-          ),
-          actions: [
-            Row(
-              children: [
-                IconButton(
-                  icon: Icon(
-                    Icons.refresh_rounded,
-                    color: Colors.white,
-                  ),
-                  onPressed: () async {
-                    APICacheManager().deleteCache("News");
-                    Navigator.pushAndRemoveUntil(
-                      context,
-                      PageRouteBuilder(
-                        pageBuilder: (context, animation1, animation2) =>
-                            HomePage(language: language, country: country),
-                        transitionDuration: Duration.zero,
-                        reverseTransitionDuration: Duration.zero,
-                      ),
-                      (Route<dynamic> route) => false,
-                    );
-                  },
-                ),
-                IconButton(
-                    onPressed: () => _key.currentState!.openEndDrawer(),
-                    icon: Icon(
-                      Icons.more_vert,
-                      color: Colors.white,
-                    )),
-              ],
-            )
-          ],
-        ),
-        body: HomeBody(
+        body: HomePageView(
           country: country,
           language: language,
         ));
   }
 }
 
-// HomePage Body
-class HomeBody extends StatelessWidget {
+class HomePageView extends StatefulWidget {
   final String country, language;
-
-  const HomeBody({super.key, required this.country, required this.language});
+  const HomePageView(
+      {super.key, required this.country, required this.language});
 
   @override
-  Widget build(BuildContext context) {
-    return FutureBuilder(
-      future:
-          NewsCall().readJsonData('category=general', '$country', '$language'),
-      builder: (context, data) {
-        if (data.hasError) {
-          return Center(
-            child: Text("${data.error}"),
-          );
-        } else if (data.hasData) {
-          var items = data.data as List<NewsDataModel>;
-          return Container(
-            child: RefreshIndicator(
-              onRefresh: () async {
-                items.clear();
-                APICacheManager().deleteCache("News");
-                Navigator.pushAndRemoveUntil(
-                  context,
-                  PageRouteBuilder(
-                    pageBuilder: (context, animation1, animation2) =>
-                        HomePage(language: language, country: country),
-                    transitionDuration: Duration.zero,
-                    reverseTransitionDuration: Duration.zero,
-                  ),
-                  (Route<dynamic> route) => false,
-                );
-              },
-              child: PageView.builder(
-                itemCount: items.length,
-                itemBuilder: (context, index) {
-                  return newpages(
-                    photoLink: items[index].image_url.toString(),
-                    title: items[index].title.toString(),
-                    body: items[index].description.toString(),
-                    author: items[index].author_name.toString(),
-                    source: items[index].source_name.toString(),
-                    sourceUrl: items[index].source_url.toString(),
-                    created_at: items[index].created_at.toString(),
-                  );
-                },
-                scrollDirection: Axis.vertical,
-                allowImplicitScrolling: true,
-              ),
-            ),
-          );
-        } else {
-          return Center(
-            child: Shimmer.fromColors(
-                // ignore: sort_child_properties_last
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    Padding(
-                      padding: EdgeInsets.only(bottom: 10.0.sp),
-                      child: Container(
-                        height: 376.h,
-                        width: double.infinity,
-                        color: Colors.white,
-                      ),
-                    ),
-                    Padding(
-                      padding: EdgeInsets.only(bottom: 10.0.sp),
-                      child: Container(
-                        height: 126.h,
-                        width: double.infinity,
-                        color: Colors.white,
-                      ),
-                    ),
-                    Container(
-                      height: 290.h,
-                      width: double.infinity,
-                      color: Colors.white,
-                    ),
-                  ],
-                ),
-                baseColor: Colors.grey.shade500,
-                highlightColor: Colors.grey.shade400),
-          );
-        }
-      },
-    );
-  }
+  State<HomePageView> createState() => _HomePageViewState();
 }
 
-// EndDrawer
-class CustomEndDrawers extends StatelessWidget {
-  const CustomEndDrawers({super.key});
+class _HomePageViewState extends State<HomePageView> {
+  int _pageIndex = 0;
+
+  @override
+  void initState() {
+    Constants.screensPageViewController = PageController(initialPage: 1);
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Drawer(
-      child: SafeArea(
-          child: ListView(
-        padding: EdgeInsets.zero,
+    return Scaffold(
+        body: Container(
+      color: Colors.white,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
-          ListTile(
-            leading: Icon(Icons.map_rounded),
-            title: Text(
-              'Select Country',
-              style: TextStyle(
-                fontSize: 18.sp,
-              ),
+          Expanded(
+            child: PageView(
+              allowImplicitScrolling: true,
+              //physics: AlwaysScrollableScrollPhysics(),
+              controller: Constants.screensPageViewController,
+              onPageChanged: (index) {
+                setState(() {
+                  _pageIndex = index;
+                });
+              },
+              children: [
+                DiscoverPage(),
+                SwipeNews(country: widget.country, language: widget.language),
+              ],
             ),
-          ),
-          ListTile(
-            leading: Icon(Icons.share_rounded),
-            title: Text(
-              'Share App',
-              style: TextStyle(
-                fontSize: 18.sp,
-              ),
-            ),
-          ),
-          ListTile(
-            leading: Icon(Icons.bug_report),
-            title: Text(
-              'Report Bug',
-              style: TextStyle(
-                fontSize: 18.sp,
-              ),
-            ),
-          ),
-          ListTile(
-            leading: Icon(Icons.phone),
-            title: Text(
-              'Support',
-              style: TextStyle(
-                fontSize: 18.sp,
-              ),
-            ),
-          ),
-          InkWell(
-            child: ListTile(
-              leading: Icon(Icons.cached_rounded),
-              title: Text(
-                'Clear Cache',
-                style: TextStyle(
-                  fontSize: 18.sp,
-                ),
-              ),
-            ),
-            onTap: () {
-              APICacheManager().deleteCache("savedCountry");
-              APICacheManager().deleteCache("savedLanguage");
-            },
           ),
         ],
-      )),
-    );
+      ),
+    ));
   }
 }
