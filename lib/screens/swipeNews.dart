@@ -4,7 +4,6 @@ import 'package:api_cache_manager/utils/cache_manager.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:theshorts/constants.dart';
 import 'package:theshorts/layouts/newsLayout.dart';
 import 'package:theshorts/models/NewsDataModel.dart';
@@ -34,8 +33,7 @@ class _SwipeNewsState extends State<SwipeNews> {
           elevation: 0,
           title: Text(
             "Home",
-            style: GoogleFonts.notoSansSymbols(
-                color: Colors.white, fontWeight: FontWeight.w600),
+            style: TextStyle(color: Colors.white, fontWeight: FontWeight.w600),
           ),
           leading: InkWell(
             child: Row(
@@ -46,7 +44,7 @@ class _SwipeNewsState extends State<SwipeNews> {
                 ),
                 Text(
                   "Discover",
-                  style: GoogleFonts.poppins(
+                  style: TextStyle(
                       color: Colors.white, fontWeight: FontWeight.w600),
                 )
               ],
@@ -100,7 +98,6 @@ class _SwipeNewsState extends State<SwipeNews> {
               );
             } else if (data.hasData) {
               var items = data.data as List<NewsDataModel>;
-
               if (Constants.isNewsCached != 1) {
                 return Container(
                   child: PageView.builder(
@@ -143,16 +140,29 @@ class _SwipeNewsState extends State<SwipeNews> {
                       },
                       scrollDirection: Axis.vertical,
                     ),
-                    Center(
-                      child: Container(
-                        height: 100.h,
-                        width: 100.w,
-                        color: Colors.white,
-                        child: CupertinoActivityIndicator(
-                          animating: true,
-                          radius: 15,
-                          color: Colors.red,
+                    SafeArea(
+                      child: Align(
+                        // ignore: sort_child_properties_last
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            const CupertinoActivityIndicator(
+                              animating: true,
+                              radius: 10,
+                              color: Colors.white,
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.all(5.0),
+                              child: Text(
+                                "Refreshing",
+                                style: TextStyle(
+                                    color: Colors.white, fontSize: 14.sp),
+                              ),
+                            )
+                          ],
                         ),
+                        alignment: Alignment.topCenter,
                       ),
                     ),
                   ],
@@ -161,10 +171,20 @@ class _SwipeNewsState extends State<SwipeNews> {
               ;
             } else {
               return Center(
-                child: CupertinoActivityIndicator(
-                  animating: true,
-                  radius: 15,
-                  color: Constants.primaryColor,
+                child: FittedBox(
+                  child: Column(
+                    children: [
+                      CupertinoActivityIndicator(
+                        animating: true,
+                        radius: 15,
+                        color: Constants.primaryColor,
+                      ),
+                      Text(
+                        "Loading News",
+                        style: TextStyle(fontSize: 15.sp),
+                      )
+                    ],
+                  ),
                 ),
               );
             }

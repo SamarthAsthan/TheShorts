@@ -49,7 +49,7 @@ class MainHomePage extends StatelessWidget {
           ),
           debugShowCheckedModeBanner: false,
           title: "TheShorts",
-          home: HomePage(country: savedCountry, language: 'ENGLISH'),
+          home: HomePage(country: savedCountry, language: savedLanguage),
         );
       },
     );

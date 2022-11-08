@@ -1,18 +1,12 @@
 // ignore_for_file: prefer_const_constructors, sized_box_for_whitespace, unnecessary_string_interpolations, camel_case_types, non_constant_identifier_names, sort_child_properties_last
 
-import 'dart:convert';
 import 'dart:ui';
 
 import 'package:api_cache_manager/api_cache_manager.dart';
-import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:theshorts/models/NewsDataModel.dart';
-import 'package:http/http.dart' as http;
-import 'package:url_launcher/url_launcher.dart';
 
 //Cutom Widget
 class newpages extends StatelessWidget {
@@ -58,8 +52,8 @@ class newpages extends StatelessWidget {
             alignment: Alignment.bottomLeft,
             child: Text('$title',
                 maxLines: 2,
-                style: GoogleFonts.notoSans(
-                    fontSize: 18.sp,
+                style: TextStyle(
+                    fontSize: 19.sp,
                     color: Colors.white,
                     fontWeight: FontWeight.w600)),
           ),
@@ -79,13 +73,11 @@ class newpages extends StatelessWidget {
               Text('$author',
                   maxLines: 8,
                   overflow: TextOverflow.ellipsis,
-                  style: GoogleFonts.notoSans(
-                      fontSize: 15.sp, color: Colors.white)),
+                  style: TextStyle(fontSize: 15.sp, color: Colors.white)),
               Text('Publised $created_at',
                   maxLines: 8,
                   overflow: TextOverflow.ellipsis,
-                  style: GoogleFonts.notoSans(
-                      fontSize: 15.sp, color: Colors.white)),
+                  style: TextStyle(fontSize: 15.sp, color: Colors.white)),
             ],
           ),
         ),
@@ -96,7 +88,7 @@ class newpages extends StatelessWidget {
               Stack(
                 children: [
                   Padding(
-                      padding: EdgeInsets.fromLTRB(0, 480.h, 0, 0),
+                      padding: EdgeInsets.fromLTRB(0, 470.h, 0, 0),
                       child: Container(
                         height: 285.h,
                         decoration: BoxDecoration(
@@ -105,15 +97,15 @@ class newpages extends StatelessWidget {
                                 top: Radius.circular(10.sp))),
                       )),
                   Padding(
-                    padding: EdgeInsets.fromLTRB(12.w, 481.h, 12.w, 0),
+                    padding: EdgeInsets.fromLTRB(12.w, 471.h, 12.w, 0),
                     child: Container(
-                      height: 284.h,
+                      height: 282.h,
                       child: SingleChildScrollView(
                         child: Text(body,
                             overflow: TextOverflow.ellipsis,
                             maxLines: 20,
-                            style: GoogleFonts.notoSans(
-                                fontSize: 17.sp, color: Colors.grey.shade700)),
+                            style: TextStyle(
+                                fontSize: 18.sp, color: Colors.grey.shade700)),
                       ),
                     ),
                   ),
@@ -122,7 +114,7 @@ class newpages extends StatelessWidget {
               Align(
                 alignment: FractionalOffset.bottomCenter,
                 child: SizedBox(
-                  height: 47.h,
+                  height: 57.h,
                   child: InkWell(
                     child: Stack(
                       fit: StackFit.expand,
@@ -150,10 +142,10 @@ class newpages extends StatelessWidget {
                                     EdgeInsets.fromLTRB(20.w, 6.h, 0.w, 0.h),
                                 child: Text(
                                   'Tap to know more',
-                                  style: GoogleFonts.notoSans(
+                                  style: TextStyle(
                                       color: Colors.white,
                                       fontWeight: FontWeight.w500,
-                                      fontSize: 12.sp),
+                                      fontSize: 14.sp),
                                 ),
                               ),
                             ),
@@ -179,6 +171,9 @@ class newpages extends StatelessWidget {
 
                       _launchInBrowser('$sourceUrl');*/
                       APICacheManager().deleteCache("News");
+                      APICacheManager().deleteCache("savedCountry");
+                      APICacheManager().deleteCache("savedLanguage");
+                      APICacheManager().deleteCache("Categories");
                     },
                   ),
                 ),

@@ -6,7 +6,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:lottie/lottie.dart';
 import 'package:theshorts/constants.dart';
 import 'package:theshorts/screens/homePage.dart';
@@ -59,6 +58,7 @@ class _OnBoardPageState extends State<OnBoardPage> {
             children: [
               Expanded(
                 child: PageView(
+                   allowImplicitScrolling: true,
                   //physics: NeverScrollableScrollPhysics(),
                   controller: _pageController,
                   onPageChanged: (index) {
@@ -165,7 +165,7 @@ class OnBoardContent1 extends StatelessWidget {
         ),
         Text(
           "Welcome",
-          style: GoogleFonts.poppins(
+          style:TextStyle(
               fontSize: 37.sp,
               color: Colors.black,
               fontWeight: FontWeight.w600),
@@ -175,7 +175,7 @@ class OnBoardContent1 extends StatelessWidget {
         ),
         Text(
             textAlign: TextAlign.center,
-            style: GoogleFonts.poppins(
+            style: TextStyle(
                 fontSize: 20.sp,
                 color: Colors.black,
                 fontWeight: FontWeight.w600),
@@ -228,7 +228,7 @@ class OnBoardContent2 extends StatelessWidget {
           Text(
             textAlign: TextAlign.start,
             "Which country's news do you want to read?",
-            style: GoogleFonts.poppins(
+            style: TextStyle(
                 fontSize: 25.sp,
                 color: Colors.black,
                 fontWeight: FontWeight.w600),
@@ -264,7 +264,7 @@ class OnBoardContent2 extends StatelessWidget {
                                     padding: const EdgeInsets.all(5.0),
                                     child: Text(
                                         items[index].countryName.toString(),
-                                        style: GoogleFonts.poppins(
+                                        style: TextStyle(
                                             fontSize: 20.sp,
                                             color: Constants.primaryColor,
                                             fontWeight: FontWeight.w600)),
@@ -325,7 +325,7 @@ class OnBoardContent2 extends StatelessWidget {
               child: Text(
                 textAlign: TextAlign.center,
                 "Whatever country and language you select now will be your default reading settings, You can also change this by going to the app's settings",
-                style: GoogleFonts.poppins(
+                style: TextStyle(
                     fontSize: 15.sp,
                     color: Colors.black,
                     fontWeight: FontWeight.w600),
@@ -370,7 +370,7 @@ class OnBoardContent3 extends StatelessWidget {
           child: Text(
             textAlign: TextAlign.start,
             "Please select your language.",
-            style: GoogleFonts.poppins(
+            style: TextStyle(
                 fontSize: 25.sp,
                 color: Colors.black,
                 fontWeight: FontWeight.w600),
@@ -400,7 +400,7 @@ class OnBoardContent3 extends StatelessWidget {
                               padding: const EdgeInsets.all(8.0),
                               child: Text(
                                 selectData.languageList[index],
-                                style: GoogleFonts.poppins(
+                                style: TextStyle(
                                     fontSize: 20.sp,
                                     color: Constants.primaryColor,
                                     fontWeight: FontWeight.w600),
@@ -449,7 +449,7 @@ class OnBoardContent3 extends StatelessWidget {
           child: Text(
             textAlign: TextAlign.center,
             "We are working hard to support more countries and languages",
-            style: GoogleFonts.poppins(
+            style: TextStyle(
                 fontSize: 15.sp,
                 color: Colors.black,
                 fontWeight: FontWeight.w600),

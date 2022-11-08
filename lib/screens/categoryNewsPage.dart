@@ -2,7 +2,6 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:theshorts/layouts/newsLayout.dart';
 import 'package:theshorts/screens/discoverPage.dart';
@@ -24,7 +23,7 @@ class TrendingPage extends StatelessWidget {
         elevation: 0,
         title: Text(
           '$pageheadline',
-          style: GoogleFonts.poppins(fontWeight: FontWeight.w600),
+          style: TextStyle(fontWeight: FontWeight.w600),
         ),
         leading: IconButton(
           onPressed: () {
@@ -76,7 +75,7 @@ class TrendPage extends StatelessWidget {
     print(category);
     return FutureBuilder(
       future:
-          NewsCall2().readJsonData("category=$category", 'INDIA', 'ENGLISH'),
+          CategoryPageCall().readJsonData("category=$category", 'INDIA', 'ENGLISH'),
       builder: (context, data) {
         if (data.hasError) {
           return Center(

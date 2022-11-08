@@ -5,7 +5,6 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:lottie/lottie.dart';
 import 'package:theshorts/constants.dart';
 import 'package:theshorts/main.dart';
@@ -25,12 +24,11 @@ class DiscoverPage extends StatelessWidget {
       backgroundColor: Colors.white,
       appBar: AppBar(
         centerTitle: true,
-        elevation: 0,
+        elevation: 1,
         leadingWidth: 100.w,
         title: Text(
           "Discover",
-          style: GoogleFonts.notoSansSymbols(
-              color: Colors.black, fontWeight: FontWeight.w600),
+          style: TextStyle(color: Colors.black, fontWeight: FontWeight.w600),
         ),
         backgroundColor: Colors.white,
         actions: [
@@ -39,7 +37,7 @@ class DiscoverPage extends StatelessWidget {
               children: [
                 Text(
                   "Home",
-                  style: GoogleFonts.poppins(
+                  style: TextStyle(
                       fontWeight: FontWeight.w600, color: Colors.black),
                 ),
                 Icon(
@@ -68,12 +66,10 @@ class DiscoverPage extends StatelessWidget {
             ],
           ),
           onTap: () {
-           Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => SettingsPage()
-                ),
-              );
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => SettingsPage()),
+            );
           },
         ),
       ),
@@ -112,10 +108,10 @@ class Discoverbody extends StatelessWidget {
                       delegate: SliverChildListDelegate([
                         Align(
                           child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Text(
+                            padding: const EdgeInsets.symmetric(horizontal: 10),
+                            child: AutoSizeText(
                               "Choose a topic to start reading",
-                              style: GoogleFonts.notoSans(
+                              style: TextStyle(
                                   fontSize: 25.sp, fontWeight: FontWeight.w600),
                               textAlign: TextAlign.center,
                             ),
@@ -195,7 +191,7 @@ class Circle extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.all(5.sp),
+      padding: EdgeInsets.all(2.sp),
       child: Container(
         decoration: BoxDecoration(
           borderRadius: BorderRadius.all(Radius.circular(5)),
@@ -287,7 +283,7 @@ class Circle extends StatelessWidget {
                           ? AutoSizeText(
                               '$title',
                               minFontSize: 15,
-                              style: GoogleFonts.notoSans(
+                              style: TextStyle(
                                   fontWeight: FontWeight.w600, fontSize: 14.sp),
                               textAlign: TextAlign.center,
                             )

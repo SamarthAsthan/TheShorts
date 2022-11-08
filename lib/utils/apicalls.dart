@@ -18,12 +18,13 @@ class NewsCall {
     var isCacheExist = await APICacheManager().isAPICacheKeyExist("News");
     if (!isCacheExist) {
       var response = await http.get(Uri.parse(
-          "http://faddugamers.com:8090/blog/?$category&language=$language&country=$country"));
+          "http://bavaal.com:8090/blog/?$category&language=$language&country=$country"));
       if (response.statusCode == 200) {
-        APICacheDBModel cacheDBModel =
-            new APICacheDBModel(key: "News", syncData: response.body);
+        APICacheDBModel cacheDBModel = new APICacheDBModel(
+            key: "News", syncData: utf8.decode(response.bodyBytes));
         await APICacheManager().addCacheData(cacheDBModel);
-        Map<String, dynamic> listNews = json.decode(response.body);
+        Map<String, dynamic> listNews =
+            json.decode(utf8.decode(response.bodyBytes));
         List<dynamic> data = listNews["articles"];
 
         Constants.isNewsCached = 0;
@@ -42,16 +43,17 @@ class NewsCall {
   }
 }
 
-class NewsCall2 {
+class CategoryPageCall {
   List<NewsDataModel> newsList = [];
 
 // Fetching Json file.
   Future<List<NewsDataModel>> readJsonData(
       String category, country, language) async {
     var response = await http.get(Uri.parse(
-        "http://faddugamers.com:8090/blog/?$category&language=$language&country=$country"));
+        "http://bavaal.com:8090/blog/?$category&language=$language&country=$country"));
     if (response.statusCode == 200) {
-      Map<String, dynamic> listNews = json.decode(response.body);
+      Map<String, dynamic> listNews =
+          json.decode(utf8.decode(response.bodyBytes));
       List<dynamic> data = listNews["articles"];
 
       return data.map((e) => NewsDataModel.fromJson(e)).toList();
@@ -67,9 +69,10 @@ class RegionCall {
 // Fetching Json file.
   Future<List<RegionModel>> readJsonData() async {
     var response = await http.get(
-        Uri.parse("https://mocki.io/v1/773719f3-1a06-4237-96a6-416e607f0dd8"));
+        Uri.parse("http://bavaal.com:8090/region/"));
     if (response.statusCode == 200) {
-      Map<String, dynamic> countryList = json.decode(response.body);
+      Map<String, dynamic> countryList =
+          json.decode(utf8.decode(response.bodyBytes));
       List<dynamic> data = countryList["Countries"];
 
       return data.map((e) => RegionModel.fromJson(e)).toList();
@@ -89,10 +92,11 @@ class CategoryCall {
       var response = await http.get(Uri.parse(
           "https://mocki.io/v1/355bb874-8a56-48d0-94f7-171be2b5a0d6"));
       if (response.statusCode == 200) {
-        APICacheDBModel cacheDBModel =
-            new APICacheDBModel(key: "Categories", syncData: response.body);
+        APICacheDBModel cacheDBModel = new APICacheDBModel(
+            key: "Categories", syncData: utf8.decode(response.bodyBytes));
         await APICacheManager().addCacheData(cacheDBModel);
-        Map<String, dynamic> categoryList = json.decode(response.body);
+        Map<String, dynamic> categoryList =
+            json.decode(utf8.decode(response.bodyBytes));
         List<dynamic> data = categoryList["Categories"];
 
         return data.map((e) => CategoriesModel.fromJson(e)).toList();
